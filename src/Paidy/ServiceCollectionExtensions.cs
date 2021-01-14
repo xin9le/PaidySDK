@@ -22,7 +22,8 @@ namespace Paidy
             {
                 client.BaseAddress = new(options.ApiEndpoint);
                 client.DefaultRequestHeaders.Authorization = new("Bearer", options.SecretKey);
-                client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
+                if (options.ApiVersion is not null)
+                    client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
             });
             return services;
         }

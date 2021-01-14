@@ -21,10 +21,10 @@
 
 
         /// <summary>
-        /// Gets the API version.
+        /// Gets the API version. If the API version is not set, the system will use the API version set in the Merchant Dashboard. If nothing is set in the Merchant Dashboard, the system will default to the current version of the API.
         /// </summary>
         /// <remarks>2018-04-10</remarks>
-        public string ApiVersion { get; private init; }
+        public string? ApiVersion { get; private init; }
         #endregion
 
 
@@ -41,7 +41,7 @@
         /// <summary>
         /// Creates instance.
         /// </summary>
-        public PaidyOptions(string apiEndpoint, string secretKey, string apiVersion)
+        public PaidyOptions(string apiEndpoint, string secretKey, string? apiVersion = null)
         {
             this.ApiEndpoint = apiEndpoint;
             this.SecretKey = secretKey;
