@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Paidy.Internals;
+using Utf8Json;
 
 
 
@@ -81,7 +83,8 @@ namespace Paidy.Payments.Entities
         /// A payment that was successfully captured, closed, or canceled has a status of CLOSED.
         /// </summary>
         [DataMember(Name = "status")]
-        public string Status { get; private init; }
+        [JsonFormatter(typeof(PaymentStatusFormatter))]
+        public PaymentStatus Status { get; private init; }
 
 
         /// <summary>
