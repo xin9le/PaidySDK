@@ -13,7 +13,6 @@ namespace Paidy
     public sealed class ErrorResponse
     {
 #pragma warning disable CS8618
-        #region Properties
         /// <summary>
         /// Internal error code.
         /// </summary>
@@ -49,16 +48,6 @@ namespace Paidy
         /// </summary>
         [DataMember(Name = "description")]
         public string Description { get; private init; }
-        #endregion
-
-
-        #region Constructors
-        /// <summary>
-        /// Creates instance.
-        /// </summary>
-        private ErrorResponse()
-        { }
-        #endregion
 #pragma warning restore CS8618
     }
 }
