@@ -17,21 +17,23 @@ namespace Paidy.Payments.Entities
 #pragma warning disable CS8618
         #region Properties
         /// <summary>
-        /// Payment ID.
+        /// Unique identifier for the payment.
+        /// All payment IDs begin with pay_.
         /// </summary>
         [DataMember(Name = "id")]
         public string Id { get; private init; }
 
 
         /// <summary>
-        /// Payment data created time.
+        /// Date and time the payment was created, in UTC, and displayed in ISO 8601 datetime format.
         /// </summary>
         [DataMember(Name = "created_at")]
         public DateTimeOffset CreatedAt { get; private init; }
 
 
         /// <summary>
-        /// Payment data expiration time.
+        /// Date and time the payment expires, in UTC, and displayed in ISO 8601 datetime format.
+        /// You must capture the payment before this datetime.
         /// </summary>
         [DataMember(Name = "expires_at")]
         public DateTimeOffset ExpiresAt { get; private init; }
@@ -45,7 +47,7 @@ namespace Paidy.Payments.Entities
 
 
         /// <summary>
-        /// ISO 4217 currency code for this order; set to JPY.
+        /// ISO 4217 currency code for the payment amount; set to JPY.
         /// </summary>
         [DataMember(Name = "currency")]
         public string Currency { get; private init; }
@@ -59,64 +61,72 @@ namespace Paidy.Payments.Entities
 
 
         /// <summary>
-        /// Name of the store.
-        /// This is displayed in the Checkout app header, at MyPaidy, and the Merchant Dashboard.
+        /// Merchant store name.
+        /// This field is displayed at both MyPaidy and the Merchant Dashboard.
         /// </summary>
         [DataMember(Name = "store_name")]
         public string? StoreName { get; private init; }
 
 
         /// <summary>
-        /// Test mode or not.
+        /// Indicates whether this is a test payment (created using a test API key).
         /// </summary>
         [DataMember(Name = "test")]
         public bool Test { get; private init; }
 
 
         /// <summary>
-        /// Payment status.
+        /// Current status of this payment object.
+        /// A payment that was successfully authorized has a status of AUTHORIZED.
+        /// A payment that was successfully captured, closed, or canceled has a status of CLOSED.
         /// </summary>
         [DataMember(Name = "status")]
         public string Status { get; private init; }
 
 
         /// <summary>
-        /// 
+        /// Paidy-assigned payment type.
+        /// The default value is "classic".
         /// </summary>
         [DataMember(Name = "tier")]
         public string Tier { get; private init; }
 
 
         /// <summary>
-        /// <see cref="BuyerInfo"/> object containing details about the buyer.
+        /// Buyer object.
+        /// Consumer's name and contact information.
         /// </summary>
         [DataMember(Name = "buyer")]
         public BuyerInfo Buyer { get; private init; }
 
 
         /// <summary>
-        /// <see cref="OrderInfo"/> object containing details about the items being purchased.
+        /// Order object.
+        /// Order/cart details passed by the merchant.
         /// </summary>
         [DataMember(Name = "order")]
         public OrderInfo Order { get; private init; }
 
 
         /// <summary>
-        /// <see cref="ShippingAddressInfo"/> object containing the address to which the goods are being shipped.
+        /// Shipping address object.
+        /// Shipping address for the order.
         /// </summary>
         [DataMember(Name = "shipping_address")]
         public ShippingAddressInfo ShippingAddress { get; private init; }
 
 
         /// <summary>
-        /// Captured data collection.
+        /// Captures object.
+        /// Array of objects representing the captured payments.
         /// </summary>
         [DataMember(Name = "captures")]
         public IReadOnlyList<CaptureInfo> Captures { get; private init; }
 
 
         /// <summary>
-        /// Refunded data collection.
+        /// Refunds object.
+        /// Array of objects representing the refunded payments.
         /// </summary>
         [DataMember(Name = "refunds")]
         public IReadOnlyList<RefundInfo> Refunds { get; private init; }
@@ -125,8 +135,6 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Merchant-defined data about the object.
         /// This field is a key-value map, limited to 20 keys.
-        /// The metadata field can be set in the merchant configuration and in the payload data.
-        /// If it is set in both places, the values set in the payload will overwrite the values set in the merchant configuration.
         /// </summary>
         [DataMember(Name = "metadata")]
         public IReadOnlyDictionary<string, object> Metadata { get; private init; }
@@ -160,8 +168,6 @@ namespace Paidy.Payments.Entities
 
             /// <summary>
             /// Consumer's email address.
-            /// If this field is included in the payload, it will be pre-filled in the Paidy Checkout app when it launches.
-            /// If this field are not included in the payload, the consumer must enter them during checkout.
             /// </summary>
             [DataMember(Name = "email")]
             public string? Email { get; private init; }
@@ -170,8 +176,6 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Consumer's phone number, e.g., 09011112222.
             /// This should be a Japanese mobile phone where the consumer can receive text messages.
-            /// If this field is included in the payload, it will be pre-filled in the Paidy Checkout app when it launches.
-            /// If this field are not included in the payload, the consumer must enter them during checkout.
             /// </summary>
             [DataMember(Name = "phone")]
             public string? Phone { get; private init; }
@@ -184,28 +188,8 @@ namespace Paidy.Payments.Entities
         public sealed class OrderInfo
         {
             /// <summary>
-            /// Total tax charged on the order.
-            /// </summary>
-            [DataMember(Name = "tax")]
-            public decimal? Tax { get; private init; }
-
-
-            /// <summary>
-            /// Total shipping charges for the order.
-            /// </summary>
-            [DataMember(Name = "shipping")]
-            public decimal? Shipping { get; private init; }
-
-
-            /// <summary>
-            /// Merchant-defined order ID or reference.
-            /// </summary>
-            [DataMember(Name = "order_ref")]
-            public string? OrderRef { get; private init; }
-
-
-            /// <summary>
-            /// Array of items objects representing all of the items in the order.
+            /// Items object.
+            /// Array of objects representing the order items in this payment.
             /// If you want to offer consumers a discount, use this object to create a "discount order item", with the unit_price set to the negative value of the discount.
             /// </summary>
             [DataMember(Name = "items")]
@@ -213,7 +197,28 @@ namespace Paidy.Payments.Entities
 
 
             /// <summary>
-            /// Order data updated time.
+            /// Total tax for the order.
+            /// </summary>
+            [DataMember(Name = "tax")]
+            public decimal? Tax { get; private init; }
+
+
+            /// <summary>
+            /// Total shipping cost for the order.
+            /// </summary>
+            [DataMember(Name = "shipping")]
+            public decimal? Shipping { get; private init; }
+
+
+            /// <summary>
+            /// Merchant-assigned order or cart ID.
+            /// </summary>
+            [DataMember(Name = "order_ref")]
+            public string? OrderRef { get; private init; }
+
+
+            /// <summary>
+            /// Time the order was last updated, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
             [DataMember(Name = "updated_at")]
             public DateTimeOffset? UpdatedAt { get; private init; }
@@ -226,35 +231,41 @@ namespace Paidy.Payments.Entities
         public sealed class ItemInfo
         {
             /// <summary>
-            /// Merchant-defined product identifier.
+            /// Merchant’s product identifier.
+            /// This field is optional, but if it is sent, it will be displayed at the Merchant Dashboard and MyPaidy.
             /// </summary>
             [DataMember(Name = "id")]
             public string? Id { get; private init; }
 
 
             /// <summary>
-            /// Title of the order item (or discount/coupon).
+            /// Name of the product.
+            /// This field is optional, but we recommend sending it as part of the payload.
+            /// If sent, it is shown at both the Merchant Dashboard and MyPaidy to identify the order item.
+            /// If not sent, only the quantity and unit price will be displayed for the order item.
             /// </summary>
             [DataMember(Name = "title")]
             public string? Title { get; private init; }
 
 
             /// <summary>
-            /// Description of the item.
+            /// Description for the product.
+            /// Currently, this is not displayed at the Merchant Dashboard or MyPaidy.
             /// </summary>
             [DataMember(Name = "description")]
             public string? Description { get; private init; }
 
 
             /// <summary>
-            /// Price per unit for the item.
+            /// Price per unit of the product.
+            /// The unit_price can be a negative value to represent a discount.
             /// </summary>
             [DataMember(Name = "unit_price")]
             public decimal UnitPrice { get; private init; }
 
 
             /// <summary>
-            /// Quantity of the item added to the order.
+            /// Quantity of the product ordered.
             /// </summary>
             [DataMember(Name = "quantity")]
             public int Quantity { get; private init; }
@@ -267,14 +278,14 @@ namespace Paidy.Payments.Entities
         public sealed class ShippingAddressInfo
         {
             /// <summary>
-            /// For Japanese addresses: building name, apartment number.
+            /// Building name, apartment number.
             /// </summary>
             [DataMember(Name = "line1")]
             public string? Line1 { get; private init; }
 
 
             /// <summary>
-            /// For Japanese addresses: district, land number, land number extension.
+            /// District, land number, land extension number.
             /// </summary>
             [DataMember(Name = "line2")]
             public string? Line2 { get; private init; }
@@ -288,7 +299,7 @@ namespace Paidy.Payments.Entities
 
 
             /// <summary>
-            /// Prefecture
+            /// Prefecture.
             /// </summary>
             [DataMember(Name = "state")]
             public string? State { get; private init; }
@@ -308,49 +319,50 @@ namespace Paidy.Payments.Entities
         public sealed class CaptureInfo
         {
             /// <summary>
-            /// Capture ID.
+            /// Unique capture ID, assigned by Paidy.
+            /// All capture IDs begin with cap_.
             /// </summary>
             [DataMember(Name = "id")]
             public string Id { get; private init; }
 
 
             /// <summary>
-            /// Capture data created time.
+            /// Date and time the capture was created, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
             [DataMember(Name = "created_at")]
             public DateTimeOffset CreatedAt { get; private init; }
 
 
             /// <summary>
-            /// Total capture amount, including tax, shipping, and excluding any discounts.
+            /// Amount captured.
             /// </summary>
             [DataMember(Name = "amount")]
             public decimal Amount { get; private init; }
 
 
             /// <summary>
-            /// Total tax charged on the capture.
+            /// Tax amount captured.
             /// </summary>
             [DataMember(Name = "tax")]
             public decimal? Tax { get; private init; }
 
 
             /// <summary>
-            /// Total shipping charges for the capture.
+            /// Shipping cost captured.
             /// </summary>
             [DataMember(Name = "shipping")]
             public decimal? Shipping { get; private init; }
 
 
             /// <summary>
-            /// Array of items objects representing all of the items in the capture.
+            /// Array of objects representing the order items being captured.
             /// </summary>
             [DataMember(Name = "items")]
             public IReadOnlyList<ItemInfo> Items { get; private init; }
 
 
             /// <summary>
-            /// Merchant-defined data about the object.
+            /// Merchant-defined data about the capture object.
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
             [DataMember(Name = "metadata")]
@@ -364,44 +376,45 @@ namespace Paidy.Payments.Entities
         public sealed class RefundInfo
         {
             /// <summary>
-            /// Refund ID.
+            /// Unique refund ID, assigned by Paidy.
+            /// All refund IDs begin with ref_.
             /// </summary>
             [DataMember(Name = "id")]
             public string Id { get; private init; }
 
 
             /// <summary>
-            /// Refund data created time.
+            /// Date and time the refund was created, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
             [DataMember(Name = "created_at")]
             public DateTimeOffset CreatedAt { get; private init; }
 
 
             /// <summary>
-            /// Capture ID.
+            /// Capture ID of the items being refunded.
+            /// A refund must map to a capture.
+            /// All capture IDs begin with cap_.
             /// </summary>
             [DataMember(Name = "capture_id")]
             public string CaptureId { get; private init; }
 
 
             /// <summary>
-            /// Total refund amount, including tax, shipping, and excluding any discounts.
-            /// Paidy uses this field to determine whether the request is for a partial refund or full refund.
-            /// If no amount is specified, Paidy refunds the full payment amount for that capture.
+            /// Amount refunded.
             /// </summary>
             [DataMember(Name = "amount")]
             public decimal? Amount { get; private init; }
 
 
             /// <summary>
-            /// Containing the reason for the refund.
+            /// Reason for the refund.
             /// </summary>
             [DataMember(Name = "reason")]
             public string? Reason { get; private init; }
 
 
             /// <summary>
-            /// Merchant-defined data about the object.
+            /// Merchant-defined data about the refund.
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
             [DataMember(Name = "metadata")]
