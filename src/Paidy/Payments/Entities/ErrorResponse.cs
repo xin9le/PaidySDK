@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
+using Paidy.Internals;
+using Utf8Json;
 
 
 
@@ -22,6 +24,7 @@ namespace Paidy.Payments.Entities
         /// HTTP response code.
         /// </summary>
         [DataMember(Name = "status")]
+        [JsonFormatter(typeof(HttpStatusCodeFormatter))]
         public HttpStatusCode Status { get; private init; }
 
 
