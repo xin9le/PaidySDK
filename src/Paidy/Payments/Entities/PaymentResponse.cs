@@ -9,7 +9,7 @@ using Utf8Json;
 namespace Paidy.Payments.Entities
 {
     /// <summary>
-    /// Represents Paidy payment response object.
+    /// Represents the Paidy payment response object.
     /// </summary>
     /// <remarks>
     /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-1-payment-object"></a>

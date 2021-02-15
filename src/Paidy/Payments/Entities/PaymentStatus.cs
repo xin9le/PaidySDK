@@ -1,7 +1,7 @@
 ﻿namespace Paidy.Payments.Entities
 {
     /// <summary>
-    /// Indicates the status of payment.
+    /// Represents the status of payment.
     /// </summary>
     public enum PaymentStatus : byte
     {
