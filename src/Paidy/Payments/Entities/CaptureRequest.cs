@@ -14,8 +14,8 @@ namespace Paidy.Payments.Entities
     public readonly struct CaptureRequest
     {
         /// <summary>
-        /// Merchant-defined data about the capture object.
-        /// This field is a key-value map, limited to 20 keys.
+        /// You can use this field to store additional structured information about the capture.
+        /// It is a key-value map, limited to 20 keys.
         /// </summary>
         [DataMember(Name = "metadata")]
         public IDictionary<string, object>? Metadata { get; init; }
