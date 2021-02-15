@@ -112,6 +112,24 @@ namespace Paidy.Payments
         }
 
 
+        /// <summary>
+        /// Closes a Paidy payment that was successfully authorized, but not captured.
+        /// The payment must have a status of AUTHORIZED.
+        /// </summary>
+        /// <param name="id">Paidy payment ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-7-close-a-payment"></a>
+        /// </remarks>
+        public async ValueTask<PaymentResponse> CloseAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var url = $"payments/{id}/close";
+            var response = await this.HttpClient.PostAsync(url, null!, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
         #region Helpers
         /// <summary>
         /// Reads the response content of the payment.
