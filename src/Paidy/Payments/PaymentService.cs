@@ -69,7 +69,7 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> CaptureAsync(string id, CaptureRequest request = default, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}/captures";
-            var resolver = StandardResolver.AllowPrivateExcludeNull;
+            var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
@@ -88,7 +88,7 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> RefundAsync(string id, RefundRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}/refunds";
-            var resolver = StandardResolver.AllowPrivateExcludeNull;
+            var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
