@@ -10,7 +10,7 @@ namespace Paidy.Payments.Entities
     /// Represents Paidy payment response object.
     /// </summary>
     /// <remarks>
-    /// Reference : <a href="https://paidy.com/docs/en/payments.html#status"></a>
+    /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-1-payment-object"></a>
     /// </remarks>
     public sealed class PaymentResponse
     {

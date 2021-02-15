@@ -38,6 +38,9 @@ namespace Paidy.Payments
         /// <param name="id">Paidy payment ID</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-5-retrieve-a-payment"></a>
+        /// </remarks>
         public async ValueTask<PaymentResponse> RetrieveAsync(string id, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}";
