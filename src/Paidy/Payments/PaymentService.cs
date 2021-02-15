@@ -76,6 +76,25 @@ namespace Paidy.Payments
 
 
         /// <summary>
+        /// Refunds all or part of a Paidy payment. You can only refund a payment that has captured.
+        /// </summary>
+        /// <param name="id">Paidy payment ID</param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-4-refund-a-payment"></a>
+        /// </remarks>
+        public async ValueTask<PaymentResponse> RefundAsync(string id, RefundRequest request, CancellationToken cancellationToken = default)
+        {
+            var url = $"payments/{id}/refunds";
+            var resolver = StandardResolver.AllowPrivateExcludeNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Retrieves the specified payment.
         /// If successful, returns the entire payment object, including the status, any captures, and any refunds.
         /// </summary>
