@@ -21,7 +21,9 @@
 
 
         /// <summary>
-        /// Gets the API version. If the API version is not set, the system will use the API version set in the Merchant Dashboard. If nothing is set in the Merchant Dashboard, the system will default to the current version of the API.
+        /// Gets the API version.
+        /// If the API version is not set, the system will use the API version set in the Merchant Dashboard.
+        /// If nothing is set in the Merchant Dashboard, the system will default to the current version of the API.
         /// </summary>
         /// <remarks>2018-04-10</remarks>
         public string? ApiVersion { get; private init; }
