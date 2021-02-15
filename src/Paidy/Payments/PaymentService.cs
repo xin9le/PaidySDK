@@ -1,4 +1,9 @@
 ﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Paidy.Internals;
+using Paidy.Payments.Entities;
+using Utf8Json.Resolvers;
 
 
 
@@ -24,5 +29,21 @@ namespace Paidy.Payments
         internal PaymentService(HttpClient client)
             => this.HttpClient = client;
         #endregion
+
+
+        /// <summary>
+        /// Retrieves the specified payment.
+        /// If successful, returns the entire payment object, including the status, any captures, and any refunds.
+        /// </summary>
+        /// <param name="id">Paidy payment ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async ValueTask<PaymentResponse> RetrieveAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var url = $"payments/{id}";
+            var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var resolver = StandardResolver.AllowPrivate;
+            return await response.Content.ReadFromJsonAsync<PaymentResponse>(resolver).ConfigureAwait(false);
+        }
     }
 }
