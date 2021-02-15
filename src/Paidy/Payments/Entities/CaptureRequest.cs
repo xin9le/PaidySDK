@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Paidy.Payments.Entities
 {
     /// <summary>
-    /// Represents the Paidy payment capture object.
+    /// Represents the Paidy payment capture request object.
     /// </summary>
     /// <remarks>
     /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-3-capture-a-payment"></a>
