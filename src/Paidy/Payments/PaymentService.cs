@@ -44,7 +44,7 @@ namespace Paidy.Payments
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Reference : <a href="https://paidy.com/docs/api/jp/index.html#2-3-capture"></a>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-3-capture-a-payment"></a>
         /// </remarks>
         public ValueTask<PaymentResponse> CaptureAsync(string id, IDictionary<string, object>? metadata = default, CancellationToken cancellationToken = default)
         {
@@ -64,7 +64,7 @@ namespace Paidy.Payments
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Reference : <a href="https://paidy.com/docs/api/jp/index.html#2-3-capture"></a>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-3-capture-a-payment"></a>
         /// </remarks>
         public async ValueTask<PaymentResponse> CaptureAsync(string id, CaptureRequest request = default, CancellationToken cancellationToken = default)
         {

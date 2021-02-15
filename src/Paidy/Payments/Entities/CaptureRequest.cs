@@ -9,7 +9,7 @@ namespace Paidy.Payments.Entities
     /// 
     /// </summary>
     /// <remarks>
-    /// Reference : <a href="https://paidy.com/docs/api/jp/index.html#2-3-capture"></a>
+    /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-3-capture-a-payment"></a>
     /// </remarks>
     public readonly struct CaptureRequest
     {
