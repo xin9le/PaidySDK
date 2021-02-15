@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Net;
-using Paidy.Payments.Entities;
 using Utf8Json;
 using Utf8Json.Resolvers;
 
 
 
-namespace Paidy.Payments
+namespace Paidy
 {
     /// <summary>
     /// Represents an exception occurred by the Paidy API.
     /// </summary>
-    public sealed class PaymentException : Exception
+    public sealed class PaidyException : Exception
     {
         #region Properties
         /// <summary>
@@ -21,18 +20,18 @@ namespace Paidy.Payments
 
 
         /// <summary>
-        /// Gets the raw error information.
+        /// Gets the error payload.
         /// </summary>
-        public string RawError { get; }
+        public string Payload { get; }
 
 
         /// <summary>
         /// Gets the error information.
         /// </summary>
-        public ErrorResponse ErrorResponse
-            => this.errorResponse
-            ??= JsonSerializer.Deserialize<ErrorResponse>(this.RawError, StandardResolver.AllowPrivate);
-        private ErrorResponse? errorResponse;
+        public ErrorResponse Error
+            => this.error
+            ??= JsonSerializer.Deserialize<ErrorResponse>(this.Payload, StandardResolver.AllowPrivate);
+        private ErrorResponse? error;
         #endregion
 
 
@@ -41,9 +40,9 @@ namespace Paidy.Payments
         /// Creates instance.
         /// </summary>
         /// <param name="statusCode"></param>
-        /// <param name="rawError"></param>
-        internal PaymentException(HttpStatusCode statusCode, string rawError)
-            : this("An exception was occured while communicating with the Paidy API.", statusCode, rawError)
+        /// <param name="payload"></param>
+        internal PaidyException(HttpStatusCode statusCode, string payload)
+            : this("An exception was occured while communicating with the Paidy API.", statusCode, payload)
         { }
 
 
@@ -52,9 +51,9 @@ namespace Paidy.Payments
         /// </summary>
         /// <param name="message"></param>
         /// <param name="statusCode"></param>
-        /// <param name="rawError"></param>
-        internal PaymentException(string message, HttpStatusCode statusCode, string rawError)
-            : this(message, null, statusCode, rawError)
+        /// <param name="payload"></param>
+        internal PaidyException(string message, HttpStatusCode statusCode, string payload)
+            : this(message, null, statusCode, payload)
         { }
 
 
@@ -64,12 +63,12 @@ namespace Paidy.Payments
         /// <param name="message"></param>
         /// <param name="innerException"></param>
         /// <param name="statusCode"></param>
-        /// <param name="rawError"></param>
-        internal PaymentException(string message, Exception? innerException, HttpStatusCode statusCode, string rawError)
+        /// <param name="payload"></param>
+        internal PaidyException(string message, Exception? innerException, HttpStatusCode statusCode, string payload)
             : base(message, innerException)
         {
             this.StatusCode = statusCode;
-            this.RawError = rawError;
+            this.Payload = payload;
         }
         #endregion
     }

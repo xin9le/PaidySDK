@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Paidy.Payments;
 using Paidy.Payments.Entities;
 using Utf8Json.Resolvers;
 
@@ -21,15 +20,15 @@ namespace Paidy.Internals
         /// <returns></returns>
         public static async ValueTask<PaymentResponse> ReadPaymentContentAsync(this HttpResponseMessage response)
         {
-            var resolver = StandardResolver.AllowPrivate;
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                var resolver = StandardResolver.AllowPrivate;
                 return await response.Content.ReadFromJsonAsync<PaymentResponse>(resolver).ConfigureAwait(false);
             }
             else
             {
                 var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                throw new PaymentException(response.StatusCode, error);
+                throw new PaidyException(response.StatusCode, error);
             }
         }
     }
