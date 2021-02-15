@@ -1,8 +1,10 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Paidy.Internals;
 using Paidy.Payments.Entities;
+using Utf8Json.Resolvers;
 
 
 
@@ -44,7 +46,29 @@ namespace Paidy.Payments
         {
             var url = $"payments/{id}";
             var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await response.ReadPaymentContentAsync().ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
         }
+
+
+        #region Helpers
+        /// <summary>
+        /// Reads the response content of the payment.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        private static async ValueTask<PaymentResponse> ReadContentAsync(HttpResponseMessage response)
+        {
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var resolver = StandardResolver.AllowPrivate;
+                return await response.Content.ReadFromJsonAsync<PaymentResponse>(resolver).ConfigureAwait(false);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                throw new PaidyException(response.StatusCode, error);
+            }
+        }
+        #endregion
     }
 }
