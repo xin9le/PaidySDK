@@ -129,7 +129,7 @@ namespace Paidy.Payments.Entities
         /// If it is set in both places, the values set in the payload will overwrite the values set in the merchant configuration.
         /// </summary>
         [DataMember(Name = "metadata")]
-        public IReadOnlyDictionary<string, object>? Metadata { get; private init; }
+        public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         #endregion
 
 
@@ -354,7 +354,7 @@ namespace Paidy.Payments.Entities
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
             [DataMember(Name = "metadata")]
-            public IReadOnlyDictionary<string, object>? Metadata { get; private init; }
+            public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         }
 
 
@@ -396,7 +396,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Containing the reason for the refund.
             /// </summary>
-            public string? reason { get; private init; }
+            [DataMember(Name = "reason")]
+            public string? Reason { get; private init; }
 
 
             /// <summary>
@@ -404,7 +405,7 @@ namespace Paidy.Payments.Entities
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
             [DataMember(Name = "metadata")]
-            public IReadOnlyDictionary<string, object>? Metadata { get; private init; }
+            public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         }
         #endregion
 #pragma warning restore CS8618
