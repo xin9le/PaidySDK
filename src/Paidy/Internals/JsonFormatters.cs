@@ -82,7 +82,6 @@ namespace Paidy.Internals
 
 
 
-
     /// <summary>
     /// Converts from/to <see cref="HttpStatusCode"/>.
     /// </summary>
