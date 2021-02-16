@@ -113,6 +113,28 @@ namespace Paidy.Payments
 
 
         /// <summary>
+        /// Updates the order_ref, description, and/or metadata fields for a payment.
+        /// You can only use this endpoint to update these 3 fields.
+        /// If you send other fields in the request, they will simply be ignored by Paidy.
+        /// The payment to be updated can have a status of AUTHORIZED or CLOSED.
+        /// </summary>
+        /// <param name="id">Paidy payment ID</param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-6-update-a-payment"></a>
+        /// </remarks>
+        public async ValueTask<PaymentResponse> UpdateAsync(string id, UpdateRequest request = default, CancellationToken cancellationToken = default)
+        {
+            var url = $"payments/{id}";
+            var resolver = StandardResolver.ExcludeNull;
+            var response = await this.HttpClient.PutAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Closes a Paidy payment that was successfully authorized, but not captured.
         /// The payment must have a status of AUTHORIZED.
         /// </summary>

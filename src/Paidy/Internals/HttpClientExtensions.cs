@@ -34,6 +34,27 @@ namespace Paidy.Internals
 
 
         /// <summary>
+        /// Send the specified instance as JSON via PUT method.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="client"></param>
+        /// <param name="requestUri"></param>
+        /// <param name="data"></param>
+        /// <param name="resolver"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async ValueTask<HttpResponseMessage> PutAsJsonAsync<T>(this HttpClient client, string requestUri, T data, IJsonFormatterResolver? resolver = default, CancellationToken cancellationToken = default)
+        {
+            var json = JsonSerializer.Serialize(data, resolver);
+            using (var content = new ByteArrayContent(json))
+            {
+                content.Headers.ContentType = new("application/json");
+                return await client.PutAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+
+        /// <summary>
         /// Send the specified instance as JSON via PATCH method.
         /// </summary>
         /// <typeparam name="T"></typeparam>
