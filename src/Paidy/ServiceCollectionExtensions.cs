@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Paidy.Payments;
+using Paidy.Tokens;
 
 
 
@@ -30,6 +31,7 @@ namespace Paidy
                     client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
             });
             services.TryAddSingleton(static x => new PaymentService(getHttpClient(x)));
+            services.TryAddSingleton(static x => new TokenService(getHttpClient(x)));
             return services;
 
             #region Local functions
