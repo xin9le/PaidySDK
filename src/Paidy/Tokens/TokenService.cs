@@ -54,6 +54,28 @@ namespace Paidy.Tokens
 
 
         /// <summary>
+        /// Resumes a token.
+        /// If successful, the token status is updated to ACTIVE and the merchant can use this token again to create payments.
+        /// A token can only be resumed by the same authority that suspended it.
+        /// If you try to resume a token that was suspended by a consumer, Paidy will return an error.
+        /// </summary>
+        /// <param name="id">Paidy token ID</param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-3-resume-a-token"></a>
+        /// </remarks>
+        public async ValueTask<TokenResponse> ResumeAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        {
+            var url = $"tokens/{id}/resume";
+            var resolver = StandardResolver.ExcludeNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Retrieves the specified token object.
         /// You need a valid token ID, beginning with tok_.
         /// </summary>
