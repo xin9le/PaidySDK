@@ -60,6 +60,30 @@ namespace Paidy.Internals
 
 
     /// <summary>
+    /// Converts from/to <see cref="TokenStatus"/>.
+    /// </summary>
+    internal sealed class TokenStatusFormatter : IJsonFormatter<TokenStatus>
+    {
+        public TokenStatus Deserialize(ref JsonReader reader, IJsonFormatterResolver formatterResolver)
+        {
+            var value = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, formatterResolver);
+            return value switch
+            {
+                "active" => TokenStatus.Active,
+                "suspended" => TokenStatus.Suspended,
+                "deleted" => TokenStatus.Deleted,
+                _ => throw new NotSupportedException($"Unexpected values are set. | Value : {value}"),
+            };
+        }
+
+
+        public void Serialize(ref JsonWriter writer, TokenStatus value, IJsonFormatterResolver formatterResolver)
+            => throw new NotImplementedException();
+    }
+
+
+
+    /// <summary>
     /// Converts from/to <see cref="TokenEvent"/>.
     /// </summary>
     internal sealed class TokenEventFormatter : IJsonFormatter<TokenEvent>
