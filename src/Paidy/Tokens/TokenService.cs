@@ -76,6 +76,26 @@ namespace Paidy.Tokens
 
 
         /// <summary>
+        /// Permanently "disables" a token.
+        /// The token to be deleted can have a status of ACTIVE or SUSPENDED.
+        /// </summary>
+        /// <param name="id">Paidy token ID</param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-4-delete-a-token"></a>
+        /// </remarks>
+        public async ValueTask<TokenResponse> DeleteAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        {
+            var url = $"tokens/{id}/delete";
+            var resolver = StandardResolver.ExcludeNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Retrieves the specified token object.
         /// You need a valid token ID, beginning with tok_.
         /// </summary>
