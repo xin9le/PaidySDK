@@ -40,7 +40,7 @@ namespace Paidy.Tokens
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-5-retrieve-a-payment"></a>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-5-retrieve-a-token"></a>
         /// </remarks>
         public async ValueTask<TokenResponse> RetrieveAsync(string id, CancellationToken cancellationToken = default)
         {
