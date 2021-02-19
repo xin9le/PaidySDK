@@ -40,7 +40,7 @@ namespace Paidy.Tokens.Entities
         /// The default value is set to "default".
         /// </summary>
         [DataMember(Name = "wallet_id")]
-        public string WalletId { get; private init; }
+        public string? WalletId { get; private init; }
 
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Paidy.Tokens.Entities
         /// Description for the token.
         /// </summary>
         [DataMember(Name = "description")]
-        public string Description { get; private init; }
+        public string? Description { get; private init; }
 
 
         /// <summary>
