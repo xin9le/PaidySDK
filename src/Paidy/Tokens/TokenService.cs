@@ -49,7 +49,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/suspend";
             var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
 
@@ -71,7 +71,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/resume";
             var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
 
@@ -91,7 +91,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/delete";
             var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
 
@@ -109,7 +109,23 @@ namespace Paidy.Tokens
         {
             var url = $"tokens/{id}";
             var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// Retrieve a list of all tokens, with a status of ACTIVE or SUSPENDED, for all your consumers.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-6-retrieve-all-tokens"></a>
+        /// </remarks>
+        public async ValueTask<TokenResponse[]> RetrieveAllAsync(CancellationToken cancellationToken = default)
+        {
+            const string url = "tokens";
+            var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse[]>(response).ConfigureAwait(false);
         }
 
 
@@ -119,12 +135,12 @@ namespace Paidy.Tokens
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        private static async ValueTask<TokenResponse> ReadContentAsync(HttpResponseMessage response)
+        private static async ValueTask<T> ReadContentAsync<T>(HttpResponseMessage response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var resolver = StandardResolver.AllowPrivate;
-                return await response.Content.ReadFromJsonAsync<TokenResponse>(resolver).ConfigureAwait(false);
+                return await response.Content.ReadFromJsonAsync<T>(resolver).ConfigureAwait(false);
             }
             else
             {
