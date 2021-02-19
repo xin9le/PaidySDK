@@ -145,6 +145,7 @@ namespace Paidy.Tokens.Entities
         /// Date and time the token was deleted, in UTC, and displayed in ISO 8601 format.
         /// </summary>
         [DataMember(Name = "deleted_at")]
+        [JsonFormatter(typeof(IgnoreWhiteSpaceISO8601DateTimeOffsetFormatter))]
         public DateTimeOffset? DeletedAt { get; private init; }
         #endregion
 

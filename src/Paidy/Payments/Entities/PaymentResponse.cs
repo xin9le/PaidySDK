@@ -224,6 +224,7 @@ namespace Paidy.Payments.Entities
             /// Time the order was last updated, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
             [DataMember(Name = "updated_at")]
+            [JsonFormatter(typeof(IgnoreWhiteSpaceISO8601DateTimeOffsetFormatter))]
             public DateTimeOffset? UpdatedAt { get; private init; }
         }
 
