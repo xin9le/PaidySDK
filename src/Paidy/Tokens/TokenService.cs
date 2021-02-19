@@ -11,7 +11,7 @@ using Utf8Json.Resolvers;
 namespace Paidy.Tokens
 {
     /// <summary>
-    /// Provides the payment API service.
+    /// Provides the token API service.
     /// </summary>
     public sealed class TokenService
     {
@@ -36,7 +36,7 @@ namespace Paidy.Tokens
         /// Retrieves the specified token object.
         /// You need a valid token ID, beginning with tok_.
         /// </summary>
-        /// <param name="id">Paidy payment ID</param>
+        /// <param name="id">Paidy token ID</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>
@@ -52,7 +52,7 @@ namespace Paidy.Tokens
 
         #region Helpers
         /// <summary>
-        /// Reads the response content of the payment.
+        /// Reads the response content of the token.
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
