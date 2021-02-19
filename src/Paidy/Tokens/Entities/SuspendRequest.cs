@@ -1,19 +1,19 @@
 ﻿using System.Runtime.Serialization;
+using Paidy.Internals;
+using Utf8Json;
 
 
 
 namespace Paidy.Tokens.Entities
 {
     /// <summary>
-    /// Represents the Paidy token request object.
+    /// Represents the Paidy token suspend request object.
     /// </summary>
     /// <remarks>
     /// Reference :<br/>
     /// - <a href="https://paidy.com/docs/api/en/index.html#3-2-suspend-a-token"></a><br/>
-    /// - <a href="https://paidy.com/docs/api/en/index.html#3-3-resume-a-token"></a><br/>
-    /// - <a href="https://paidy.com/docs/api/en/index.html#3-4-delete-a-token"></a><br/>
     /// </remarks>
-    public sealed class TokenRequest
+    public sealed class SuspendRequest
     {
 #pragma warning disable CS8618
         /// <summary>
@@ -44,7 +44,8 @@ namespace Paidy.Tokens.Entities
             /// Paidy-defined reason code for the request.
             /// </summary>
             [DataMember(Name = "code")]
-            public string Code { get; init; }
+            [JsonFormatter(typeof(SuspendReasonCodeFormatter))]
+            public SuspendReasonCode Code { get; init; }
 
 
             /// <summary>

@@ -109,6 +109,81 @@ namespace Paidy.Internals
 
 
     /// <summary>
+    /// Converts from/to <see cref="SuspendReasonCode"/>.
+    /// </summary>
+    internal sealed class SuspendReasonCodeFormatter : IJsonFormatter<SuspendReasonCode>
+    {
+        public SuspendReasonCode Deserialize(ref JsonReader reader, IJsonFormatterResolver formatterResolver)
+            => throw new NotImplementedException();
+
+
+        public void Serialize(ref JsonWriter writer, SuspendReasonCode value, IJsonFormatterResolver formatterResolver)
+        {
+            var text = value switch
+            {
+                SuspendReasonCode.ConsumerRequested => "consumer.requested",
+                SuspendReasonCode.MerchantRequested => "merchant.requested",
+                SuspendReasonCode.FraudDetected => "fraud.detected",
+                SuspendReasonCode.General => "general",
+                _ => throw new NotSupportedException($"Unexpected values are set. | Value : {value}"),
+            };
+            writer.WriteString(text);
+        }
+    }
+
+
+
+    /// <summary>
+    /// Converts from/to <see cref="ResumeReasonCode"/>.
+    /// </summary>
+    internal sealed class ResumeReasonCodeFormatter : IJsonFormatter<ResumeReasonCode>
+    {
+        public ResumeReasonCode Deserialize(ref JsonReader reader, IJsonFormatterResolver formatterResolver)
+            => throw new NotImplementedException();
+
+
+        public void Serialize(ref JsonWriter writer, ResumeReasonCode value, IJsonFormatterResolver formatterResolver)
+        {
+            var text = value switch
+            {
+                ResumeReasonCode.ConsumerRequested => "consumer.requested",
+                ResumeReasonCode.MerchantRequested => "merchant.requested",
+                ResumeReasonCode.General => "general",
+                _ => throw new NotSupportedException($"Unexpected values are set. | Value : {value}"),
+            };
+            writer.WriteString(text);
+        }
+    }
+
+
+
+    /// <summary>
+    /// Converts from/to <see cref="DeleteReasonCode"/>.
+    /// </summary>
+    internal sealed class DeleteReasonCodeFormatter : IJsonFormatter<DeleteReasonCode>
+    {
+        public DeleteReasonCode Deserialize(ref JsonReader reader, IJsonFormatterResolver formatterResolver)
+            => throw new NotImplementedException();
+
+
+        public void Serialize(ref JsonWriter writer, DeleteReasonCode value, IJsonFormatterResolver formatterResolver)
+        {
+            var text = value switch
+            {
+                DeleteReasonCode.ConsumerRequested => "consumer.requested",
+                DeleteReasonCode.SubscriptionExpired => "subscription.expired",
+                DeleteReasonCode.MerchantRequested => "merchant.requested",
+                DeleteReasonCode.FraudDetected => "fraud.detected",
+                DeleteReasonCode.General => "general",
+                _ => throw new NotSupportedException($"Unexpected values are set. | Value : {value}"),
+            };
+            writer.WriteString(text);
+        }
+    }
+
+
+
+    /// <summary>
     /// Converts from/to <see cref="HttpStatusCode"/>.
     /// </summary>
     internal sealed class HttpStatusCodeFormatter : IJsonFormatter<HttpStatusCode>

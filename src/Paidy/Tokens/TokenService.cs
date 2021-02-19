@@ -44,7 +44,7 @@ namespace Paidy.Tokens
         /// <remarks>
         /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-2-suspend-a-token"></a>
         /// </remarks>
-        public async ValueTask<TokenResponse> SuspendAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        public async ValueTask<TokenResponse> SuspendAsync(string id, SuspendRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/suspend";
             var resolver = StandardResolver.ExcludeNull;
@@ -66,7 +66,7 @@ namespace Paidy.Tokens
         /// <remarks>
         /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-3-resume-a-token"></a>
         /// </remarks>
-        public async ValueTask<TokenResponse> ResumeAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        public async ValueTask<TokenResponse> ResumeAsync(string id, ResumeRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/resume";
             var resolver = StandardResolver.ExcludeNull;
@@ -86,7 +86,7 @@ namespace Paidy.Tokens
         /// <remarks>
         /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-4-delete-a-token"></a>
         /// </remarks>
-        public async ValueTask<TokenResponse> DeleteAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        public async ValueTask<TokenResponse> DeleteAsync(string id, DeleteRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/delete";
             var resolver = StandardResolver.ExcludeNull;
