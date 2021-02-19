@@ -33,6 +33,27 @@ namespace Paidy.Tokens
 
 
         /// <summary>
+        /// Suspends a token.
+        /// The token to be suspended must have a status of ACTIVE.
+        /// If successful, the token status is updated to SUSPENDED and all authorization requests for a new payment using the token will be rejected.
+        /// </summary>
+        /// <param name="id">Paidy token ID</param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#3-2-suspend-a-token"></a>
+        /// </remarks>
+        public async ValueTask<TokenResponse> SuspendAsync(string id, TokenRequest request, CancellationToken cancellationToken = default)
+        {
+            var url = $"tokens/{id}/suspend";
+            var resolver = StandardResolver.ExcludeNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            return await ReadContentAsync(response).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Retrieves the specified token object.
         /// You need a valid token ID, beginning with tok_.
         /// </summary>
