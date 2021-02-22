@@ -7,7 +7,7 @@
         <!-- NuGet -->
         <IsPackable>true</IsPackable>
         <PackageId>PaidySDK</PackageId>
-        <Version>1.0.0.0-preview1</Version>
+        <Version>1.0.0.0</Version>
         <Description>Paidy SDK for .NET</Description>
         <PackageProjectUrl>https://github.com/xin9le/PaidySDK</PackageProjectUrl>
         <PackageTags>Paidy, Payments, E-Commerce</PackageTags>
