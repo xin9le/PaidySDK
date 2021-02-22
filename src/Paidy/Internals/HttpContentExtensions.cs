@@ -22,7 +22,7 @@ namespace Paidy.Internals
         /// <returns></returns>
         public static async ValueTask<T> ReadFromJsonAsync<T>(this HttpContent content, IJsonFormatterResolver? resolver = default, CancellationToken cancellationToken = default)
         {
-#if NETSTANDARD
+#if NETSTANDARD || NET461
             var payload = await content.ReadAsByteArrayAsync().ConfigureAwait(false);
 #else
             var payload = await content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
