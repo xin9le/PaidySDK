@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,26 +49,6 @@ namespace Paidy.Payments
             var resolver = StandardResolver.ExcludeNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
-        }
-
-
-        /// <summary>
-        /// When you are ready to charge the consumer, you perform a capture request.
-        /// The payment must have a status of AUTHORIZED.
-        /// All authorized requests automatically expire.
-        /// The expiration period is specified in your contract and after this period, they are marked as expired and cannot be captured.
-        /// </summary>
-        /// <param name="id">Paidy payment ID</param>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-3-capture-a-payment"></a>
-        /// </remarks>
-        public ValueTask<PaymentResponse> CaptureAsync(string id, IDictionary<string, object>? metadata = default, CancellationToken cancellationToken = default)
-        {
-            var request = new CaptureRequest { Metadata = metadata };
-            return this.CaptureAsync(id, request, cancellationToken);
         }
 
 
