@@ -75,7 +75,26 @@ namespace Paidy.Payments
 
 
         /// <summary>
-        /// Refunds all or part of a Paidy payment. You can only refund a payment that has captured.
+        /// Refunds all or part of a Paidy payment.
+        /// You can only refund a payment that has captured.
+        /// </summary>
+        /// <param name="id">Paidy payment ID</param>
+        /// <param name="captureId">Paidy capture ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-4-refund-a-payment"></a>
+        /// </remarks>
+        public ValueTask<PaymentResponse> RefundAsync(string id, string captureId, CancellationToken cancellationToken = default)
+        {
+            var request = new RefundRequest { CaptureId = captureId };
+            return this.RefundAsync(id, request, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Refunds all or part of a Paidy payment.
+        /// You can only refund a payment that has captured.
         /// </summary>
         /// <param name="id">Paidy payment ID</param>
         /// <param name="request"></param>
