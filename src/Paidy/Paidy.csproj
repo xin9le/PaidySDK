@@ -4,6 +4,21 @@
         <TargetFrameworks>net5</TargetFrameworks>
         <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
+        <!-- NuGet -->
+        <IsPackable>true</IsPackable>
+        <PackageId>PaidySDK</PackageId>
+        <Version>1.0.0.0-preview1</Version>
+        <Description>Paidy SDK for .NET</Description>
+        <PackageProjectUrl>https://github.com/xin9le/PaidySDK</PackageProjectUrl>
+        <PackageTags>Paidy, Payments, E-Commerce</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Company />
+        <Authors>xin9le</Authors>
+        <Copyright>Copyright© xin9le, All rights reserved.</Copyright>
+        <PackageReleaseNotes></PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
