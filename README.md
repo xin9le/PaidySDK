@@ -1,9 +1,15 @@
+![Banner](https://download.paidy.com/Checkout_728x90.png)
+
+
 # PaidySDK
 PaidySDK is the simple and thin Paidy API wrapper library for .NET that supports following features.
 
 - [Payments API](https://paidy.com/docs/en/payments.html#paidyapi_pay)
 - [Tokens API](https://paidy.com/docs/en/tokens.html#paidyapi_tok)
 - [Webhooks](https://paidy.com/docs/en/webhook.html)
+
+
+[![Releases](https://img.shields.io/github/release/xin9le/PaidySDK.svg)](https://github.com/xin9le/PaidySDK/releases)
 
 
 
