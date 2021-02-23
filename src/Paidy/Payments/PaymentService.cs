@@ -75,7 +75,7 @@ namespace Paidy.Payments
 
 
         /// <summary>
-        /// Refunds all or part of a Paidy payment.
+        /// Refunds all of a Paidy payment.
         /// You can only refund a payment that has captured.
         /// </summary>
         /// <param name="id">Paidy payment ID</param>
