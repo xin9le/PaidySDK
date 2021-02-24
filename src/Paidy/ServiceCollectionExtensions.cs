@@ -21,10 +21,21 @@ namespace Paidy
         /// <param name="options"></param>
         /// <returns></returns>
         public static IServiceCollection AddPaidy(this IServiceCollection services, PaidyOptions options)
+            => services.AddPaidy(_ => options);
+
+
+        /// <summary>
+        /// Add Paidy services to DI.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="optionsFactory"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddPaidy(this IServiceCollection services, Func<IServiceProvider, PaidyOptions> optionsFactory)
         {
             const string httpClientName = "___Paidy.HttpClient___";
-            services.AddHttpClient(httpClientName, client =>
+            services.AddHttpClient(httpClientName, (provider, client) =>
             {
+                var options = optionsFactory(provider);
                 client.BaseAddress = new(options.ApiEndpoint);
                 client.DefaultRequestHeaders.Authorization = new("Bearer", options.SecretKey);
                 if (options.ApiVersion is not null)
