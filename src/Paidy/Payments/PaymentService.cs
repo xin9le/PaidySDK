@@ -36,14 +36,13 @@ namespace Paidy.Payments
         /// Creates a new subscription payment using a token.
         /// The token and the consumer must have a status of ACTIVE.
         /// </summary>
-        /// <param name="id">Paidy payment ID</param>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>
         /// Reference : <a href="https://paidy.com/docs/api/en/index.html#2-2-create-a-payment"></a>
         /// </remarks>
-        public async ValueTask<PaymentResponse> CreateAsync(string id, CreateRequest request, CancellationToken cancellationToken = default)
+        public async ValueTask<PaymentResponse> CreateAsync(CreateRequest request, CancellationToken cancellationToken = default)
         {
             const string url = "payments";
             var resolver = StandardResolver.ExcludeNull;
