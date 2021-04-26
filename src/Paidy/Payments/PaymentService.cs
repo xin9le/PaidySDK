@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Paidy.Internals;
 using Paidy.Payments.Entities;
-using Utf8Json.Resolvers;
 
 
 
@@ -45,8 +46,8 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> CreateAsync(CreateRequest request, CancellationToken cancellationToken = default)
         {
             const string url = "payments";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
 
@@ -67,8 +68,8 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> CaptureAsync(string id, CaptureRequest request = default, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}/captures";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
 
@@ -105,8 +106,8 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> RefundAsync(string id, RefundRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}/refunds";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
 
@@ -145,8 +146,8 @@ namespace Paidy.Payments
         public async ValueTask<PaymentResponse> UpdateAsync(string id, UpdateRequest request = default, CancellationToken cancellationToken = default)
         {
             var url = $"payments/{id}";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PutAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PutAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync(response).ConfigureAwait(false);
         }
 
@@ -179,8 +180,10 @@ namespace Paidy.Payments
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var resolver = StandardResolver.AllowPrivate;
-                return await response.Content.ReadFromJsonAsync<PaymentResponse>(resolver).ConfigureAwait(false);
+                var result = await response.Content.ReadFromJsonAsync<PaymentResponse>().ConfigureAwait(false);
+                if (result is null)
+                    throw new NotSupportedException($"Null response was detected | StatusCode : {response.StatusCode}");
+                return result;
             }
             else
             {
