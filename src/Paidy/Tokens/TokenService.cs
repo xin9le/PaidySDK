@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Paidy.Internals;
 using Paidy.Tokens.Entities;
-using Utf8Json.Resolvers;
 
 
 
@@ -47,8 +48,8 @@ namespace Paidy.Tokens
         public async ValueTask<TokenResponse> SuspendAsync(string id, SuspendRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/suspend";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
@@ -69,8 +70,8 @@ namespace Paidy.Tokens
         public async ValueTask<TokenResponse> ResumeAsync(string id, ResumeRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/resume";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
@@ -89,8 +90,8 @@ namespace Paidy.Tokens
         public async ValueTask<TokenResponse> DeleteAsync(string id, DeleteRequest request, CancellationToken cancellationToken = default)
         {
             var url = $"tokens/{id}/delete";
-            var resolver = StandardResolver.ExcludeNull;
-            var response = await this.HttpClient.PostAsJsonAsync(url, request, resolver, cancellationToken).ConfigureAwait(false);
+            var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
+            var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
             return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
         }
 
@@ -139,8 +140,10 @@ namespace Paidy.Tokens
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var resolver = StandardResolver.AllowPrivate;
-                return await response.Content.ReadFromJsonAsync<T>(resolver).ConfigureAwait(false);
+                var result = await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
+                if (result is null)
+                    throw new NotSupportedException($"Null response was detected | StatusCode : {response.StatusCode}");
+                return result;
             }
             else
             {
