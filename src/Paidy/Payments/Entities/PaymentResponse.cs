@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Paidy.Internals;
-using Utf8Json;
 
 
 
@@ -22,6 +22,8 @@ namespace Paidy.Payments.Entities
         /// Unique identifier for the payment.
         /// All payment IDs begin with pay_.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("id")]
         [DataMember(Name = "id")]
         public string Id { get; private init; }
 
@@ -29,6 +31,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Date and time the payment was created, in UTC, and displayed in ISO 8601 datetime format.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
         [DataMember(Name = "created_at")]
         public DateTimeOffset CreatedAt { get; private init; }
 
@@ -37,6 +41,8 @@ namespace Paidy.Payments.Entities
         /// Date and time the payment expires, in UTC, and displayed in ISO 8601 datetime format.
         /// You must capture the payment before this datetime.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("expires_at")]
         [DataMember(Name = "expires_at")]
         public DateTimeOffset ExpiresAt { get; private init; }
 
@@ -44,6 +50,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Total payment amount, including tax, shipping, and excluding any discounts.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("amount")]
         [DataMember(Name = "amount")]
         public decimal Amount { get; private init; }
 
@@ -51,6 +59,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// ISO 4217 currency code for the payment amount; set to JPY.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("currency")]
         [DataMember(Name = "currency")]
         public string Currency { get; private init; }
 
@@ -58,6 +68,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Description for the payment.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("description")]
         [DataMember(Name = "description")]
         public string? Description { get; private init; }
 
@@ -66,6 +78,8 @@ namespace Paidy.Payments.Entities
         /// Merchant store name.
         /// This field is displayed at both MyPaidy and the Merchant Dashboard.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("store_name")]
         [DataMember(Name = "store_name")]
         public string? StoreName { get; private init; }
 
@@ -73,6 +87,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Indicates whether this is a test payment (created using a test API key).
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("test")]
         [DataMember(Name = "test")]
         public bool Test { get; private init; }
 
@@ -82,8 +98,10 @@ namespace Paidy.Payments.Entities
         /// A payment that was successfully authorized has a status of AUTHORIZED.
         /// A payment that was successfully captured, closed, or canceled has a status of CLOSED.
         /// </summary>
+        [JsonConverter(typeof(PaymentStatusConverter))]
+        [JsonInclude]
+        [JsonPropertyName("status")]
         [DataMember(Name = "status")]
-        [JsonFormatter(typeof(PaymentStatusFormatter))]
         public PaymentStatus Status { get; private init; }
 
 
@@ -91,6 +109,8 @@ namespace Paidy.Payments.Entities
         /// Paidy-assigned payment type.
         /// The default value is "classic".
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("tier")]
         [DataMember(Name = "tier")]
         public string Tier { get; private init; }
 
@@ -99,6 +119,8 @@ namespace Paidy.Payments.Entities
         /// Buyer object.
         /// Consumer's name and contact information.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("buyer")]
         [DataMember(Name = "buyer")]
         public BuyerInfo Buyer { get; private init; }
 
@@ -107,6 +129,8 @@ namespace Paidy.Payments.Entities
         /// Order object.
         /// Order/cart details passed by the merchant.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("order")]
         [DataMember(Name = "order")]
         public OrderInfo Order { get; private init; }
 
@@ -115,6 +139,8 @@ namespace Paidy.Payments.Entities
         /// Shipping address object.
         /// Shipping address for the order.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("shipping_address")]
         [DataMember(Name = "shipping_address")]
         public ShippingAddressInfo ShippingAddress { get; private init; }
 
@@ -123,6 +149,8 @@ namespace Paidy.Payments.Entities
         /// Captures object.
         /// Array of objects representing the captured payments.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("captures")]
         [DataMember(Name = "captures")]
         public IReadOnlyList<CaptureInfo> Captures { get; private init; }
 
@@ -131,6 +159,8 @@ namespace Paidy.Payments.Entities
         /// Refunds object.
         /// Array of objects representing the refunded payments.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("refunds")]
         [DataMember(Name = "refunds")]
         public IReadOnlyList<RefundInfo> Refunds { get; private init; }
 
@@ -139,6 +169,8 @@ namespace Paidy.Payments.Entities
         /// Merchant-defined data about the object.
         /// This field is a key-value map, limited to 20 keys.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("metadata")]
         [DataMember(Name = "metadata")]
         public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         #endregion
@@ -156,6 +188,8 @@ namespace Paidy.Payments.Entities
             /// Family name and first name must be separated by a space, e.g., 山田　太郎.
             /// The space can be a Unicode U+0020 space or a U+3000 ideographic space.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("name1")]
             [DataMember(Name = "name1")]
             public string Name1 { get; private init; }
 
@@ -165,6 +199,8 @@ namespace Paidy.Payments.Entities
             /// Family name and first name must be separated by a space, e.g., ヤマダ　タロウ.
             /// The space can be a Unicode U+0020 space or a U+3000 ideographic space.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("name2")]
             [DataMember(Name = "name2")]
             public string? Name2 { get; private init; }
 
@@ -172,6 +208,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Consumer's email address.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("email")]
             [DataMember(Name = "email")]
             public string? Email { get; private init; }
 
@@ -180,6 +218,8 @@ namespace Paidy.Payments.Entities
             /// Consumer's phone number, e.g., 09011112222.
             /// This should be a Japanese mobile phone where the consumer can receive text messages.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("phone")]
             [DataMember(Name = "phone")]
             public string? Phone { get; private init; }
         }
@@ -195,6 +235,8 @@ namespace Paidy.Payments.Entities
             /// Array of objects representing the order items in this payment.
             /// If you want to offer consumers a discount, use this object to create a "discount order item", with the unit_price set to the negative value of the discount.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("items")]
             [DataMember(Name = "items")]
             public IReadOnlyList<ItemInfo> Items { get; private init; }
 
@@ -202,6 +244,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Total tax for the order.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("tax")]
             [DataMember(Name = "tax")]
             public decimal? Tax { get; private init; }
 
@@ -209,6 +253,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Total shipping cost for the order.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("shipping")]
             [DataMember(Name = "shipping")]
             public decimal? Shipping { get; private init; }
 
@@ -216,6 +262,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Merchant-assigned order or cart ID.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("order_ref")]
             [DataMember(Name = "order_ref")]
             public string? OrderRef { get; private init; }
 
@@ -223,8 +271,10 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Time the order was last updated, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
+            [JsonConverterWithParams(typeof(NullableDateTimeOffsetConverter), true)]
+            [JsonInclude]
+            [JsonPropertyName("updated_at")]
             [DataMember(Name = "updated_at")]
-            [JsonFormatter(typeof(IgnoreWhiteSpaceISO8601DateTimeOffsetFormatter))]
             public DateTimeOffset? UpdatedAt { get; private init; }
         }
 
@@ -238,6 +288,8 @@ namespace Paidy.Payments.Entities
             /// Merchant’s product identifier.
             /// This field is optional, but if it is sent, it will be displayed at the Merchant Dashboard and MyPaidy.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("id")]
             [DataMember(Name = "id")]
             public string? Id { get; private init; }
 
@@ -248,6 +300,8 @@ namespace Paidy.Payments.Entities
             /// If sent, it is shown at both the Merchant Dashboard and MyPaidy to identify the order item.
             /// If not sent, only the quantity and unit price will be displayed for the order item.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("title")]
             [DataMember(Name = "title")]
             public string? Title { get; private init; }
 
@@ -256,6 +310,8 @@ namespace Paidy.Payments.Entities
             /// Description for the product.
             /// Currently, this is not displayed at the Merchant Dashboard or MyPaidy.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("description")]
             [DataMember(Name = "description")]
             public string? Description { get; private init; }
 
@@ -264,6 +320,8 @@ namespace Paidy.Payments.Entities
             /// Price per unit of the product.
             /// The unit_price can be a negative value to represent a discount.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("unit_price")]
             [DataMember(Name = "unit_price")]
             public decimal UnitPrice { get; private init; }
 
@@ -271,6 +329,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Quantity of the product ordered.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("quantity")]
             [DataMember(Name = "quantity")]
             public int Quantity { get; private init; }
         }
@@ -284,6 +344,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Building name, apartment number.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("line1")]
             [DataMember(Name = "line1")]
             public string? Line1 { get; private init; }
 
@@ -291,6 +353,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// District, land number, land extension number.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("line2")]
             [DataMember(Name = "line2")]
             public string? Line2 { get; private init; }
 
@@ -298,6 +362,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Name of city, municipality, or village.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("city")]
             [DataMember(Name = "city")]
             public string? City { get; private init; }
 
@@ -305,6 +371,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Prefecture.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("state")]
             [DataMember(Name = "state")]
             public string? State { get; private init; }
 
@@ -312,6 +380,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Postal code; format is NNN-NNNN.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("zip")]
             [DataMember(Name = "zip")]
             public string Zip { get; private init; }
         }
@@ -326,6 +396,8 @@ namespace Paidy.Payments.Entities
             /// Unique capture ID, assigned by Paidy.
             /// All capture IDs begin with cap_.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("id")]
             [DataMember(Name = "id")]
             public string Id { get; private init; }
 
@@ -333,6 +405,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Date and time the capture was created, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("created_at")]
             [DataMember(Name = "created_at")]
             public DateTimeOffset CreatedAt { get; private init; }
 
@@ -340,6 +414,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Amount captured.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("amount")]
             [DataMember(Name = "amount")]
             public decimal Amount { get; private init; }
 
@@ -347,6 +423,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Tax amount captured.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("tax")]
             [DataMember(Name = "tax")]
             public decimal? Tax { get; private init; }
 
@@ -354,6 +432,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Shipping cost captured.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("shipping")]
             [DataMember(Name = "shipping")]
             public decimal? Shipping { get; private init; }
 
@@ -361,6 +441,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Array of objects representing the order items being captured.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("items")]
             [DataMember(Name = "items")]
             public IReadOnlyList<ItemInfo> Items { get; private init; }
 
@@ -369,6 +451,8 @@ namespace Paidy.Payments.Entities
             /// Merchant-defined data about the capture object.
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("metadata")]
             [DataMember(Name = "metadata")]
             public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         }
@@ -383,6 +467,8 @@ namespace Paidy.Payments.Entities
             /// Unique refund ID, assigned by Paidy.
             /// All refund IDs begin with ref_.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("id")]
             [DataMember(Name = "id")]
             public string Id { get; private init; }
 
@@ -390,6 +476,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Date and time the refund was created, in UTC, and displayed in ISO 8601 datetime format.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("created_at")]
             [DataMember(Name = "created_at")]
             public DateTimeOffset CreatedAt { get; private init; }
 
@@ -399,6 +487,8 @@ namespace Paidy.Payments.Entities
             /// A refund must map to a capture.
             /// All capture IDs begin with cap_.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("capture_id")]
             [DataMember(Name = "capture_id")]
             public string CaptureId { get; private init; }
 
@@ -406,6 +496,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Amount refunded.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("amount")]
             [DataMember(Name = "amount")]
             public decimal? Amount { get; private init; }
 
@@ -413,6 +505,8 @@ namespace Paidy.Payments.Entities
             /// <summary>
             /// Reason for the refund.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("reason")]
             [DataMember(Name = "reason")]
             public string? Reason { get; private init; }
 
@@ -421,6 +515,8 @@ namespace Paidy.Payments.Entities
             /// Merchant-defined data about the refund.
             /// This field is a key-value map, limited to 20 keys.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("metadata")]
             [DataMember(Name = "metadata")]
             public IReadOnlyDictionary<string, object> Metadata { get; private init; }
         }

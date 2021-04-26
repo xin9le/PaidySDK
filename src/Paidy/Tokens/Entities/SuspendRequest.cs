@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Paidy.Internals;
-using Utf8Json;
 
 
 
@@ -22,6 +22,8 @@ namespace Paidy.Tokens.Entities
         /// However, if a merchant-specific wallet ID was set, this field is required.
         /// If you do not sent this field or you send the incorrect value, Paidy will return an error.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("wallet_id")]
         [DataMember(Name = "wallet_id")]
         public string? WalletId { get; init; }
 
@@ -29,6 +31,8 @@ namespace Paidy.Tokens.Entities
         /// <summary>
         /// Reason for the request.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("reason")]
         [DataMember(Name = "reason")]
         public ReasonInfo Reason { get; init; }
 
@@ -43,8 +47,10 @@ namespace Paidy.Tokens.Entities
             /// <summary>
             /// Paidy-defined reason code for the request.
             /// </summary>
+            [JsonConverter(typeof(SuspendReasonCodeConverter))]
+            [JsonInclude]
+            [JsonPropertyName("code")]
             [DataMember(Name = "code")]
-            [JsonFormatter(typeof(SuspendReasonCodeFormatter))]
             public SuspendReasonCode Code { get; init; }
 
 
@@ -52,6 +58,8 @@ namespace Paidy.Tokens.Entities
             /// Additional, more specific details about the reason.
             /// This field cannot be empty.
             /// </summary>
+            [JsonInclude]
+            [JsonPropertyName("description")]
             [DataMember(Name = "description")]
             public string Description { get; init; }
         }

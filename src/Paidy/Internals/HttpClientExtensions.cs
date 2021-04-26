@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Utf8Json;
 
 
 
@@ -12,8 +12,8 @@ namespace Paidy.Internals
     /// </summary>
     internal static class HttpClientExtensions
     {
-#if NETSTANDARD2_0 || NET461
-        private static readonly HttpMethod PatchMethod = new HttpMethod("PATCH");
+#if NETSTANDARD2_0 || NET461_OR_GREATER
+        private static readonly HttpMethod PatchMethod = new("PATCH");
 
 
         /// <summary>
@@ -33,65 +33,37 @@ namespace Paidy.Internals
 
 
         /// <summary>
-        /// Send the specified instance as JSON via POST method.
+        /// Send a PATCH request to the specified Uri containing the value serialized as JSON in the request body.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="client"></param>
-        /// <param name="requestUri"></param>
-        /// <param name="data"></param>
-        /// <param name="resolver"></param>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <param name="client">The client used to send the request.</param>
+        /// <param name="requestUri">The Uri the request is sent to.</param>
+        /// <param name="value">The value to serialize.</param>
+        /// <param name="options">Options to control the behavior during serialization, the default options are System.Text.Json.JsonSerializerDefaults.Web.</param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async ValueTask<HttpResponseMessage> PostAsJsonAsync<T>(this HttpClient client, string requestUri, T data, IJsonFormatterResolver? resolver = default, CancellationToken cancellationToken = default)
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string? requestUri, T value, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
         {
-            var json = JsonSerializer.Serialize(data, resolver);
-            using (var content = new ByteArrayContent(json))
-            {
-                content.Headers.ContentType = new("application/json");
-                return await client.PostAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
-            }
-        }
-
-
-        /// <summary>
-        /// Send the specified instance as JSON via PUT method.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="client"></param>
-        /// <param name="requestUri"></param>
-        /// <param name="data"></param>
-        /// <param name="resolver"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async ValueTask<HttpResponseMessage> PutAsJsonAsync<T>(this HttpClient client, string requestUri, T data, IJsonFormatterResolver? resolver = default, CancellationToken cancellationToken = default)
-        {
-            var json = JsonSerializer.Serialize(data, resolver);
-            using (var content = new ByteArrayContent(json))
-            {
-                content.Headers.ContentType = new("application/json");
-                return await client.PutAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
-            }
-        }
-
-
-        /// <summary>
-        /// Send the specified instance as JSON via PATCH method.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="client"></param>
-        /// <param name="requestUri"></param>
-        /// <param name="data"></param>
-        /// <param name="resolver"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async ValueTask<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string requestUri, T data, IJsonFormatterResolver? resolver = default, CancellationToken cancellationToken = default)
-        {
-            var json = JsonSerializer.Serialize(data, resolver);
+            options ??= JsonSerializerOptionsProvider.Web;
+            var json = JsonSerializer.SerializeToUtf8Bytes(value, options);
             using (var content = new ByteArrayContent(json))
             {
                 content.Headers.ContentType = new("application/json");
                 return await client.PatchAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
             }
         }
+
+
+        /// <summary>
+        /// Send a PATCH request to the specified Uri containing the value serialized as JSON in the request body.
+        /// </summary>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <param name="client">The client used to send the request.</param>
+        /// <param name="requestUri">The Uri the request is sent to.</param>
+        /// <param name="value">The value to serialize.</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public static Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string? requestUri, T value, CancellationToken cancellationToken)
+            => client.PatchAsJsonAsync(requestUri, value, options: null, cancellationToken);
     }
 }

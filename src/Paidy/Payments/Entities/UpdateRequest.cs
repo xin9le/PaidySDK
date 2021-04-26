@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 
 
@@ -17,6 +18,8 @@ namespace Paidy.Payments.Entities
         /// Merchant-assigned order or cart ID.
         /// In the API v2, this field is not required, and does not need to be unique.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("order_ref")]
         [DataMember(Name = "order_ref")]
         public string? OrderRef { get; init; }
 
@@ -24,6 +27,8 @@ namespace Paidy.Payments.Entities
         /// <summary>
         /// Description for this payment.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("description")]
         [DataMember(Name = "description")]
         public string? Description { get; init; }
 
@@ -34,6 +39,8 @@ namespace Paidy.Payments.Entities
         /// When you update a field, the existing values will be overwritten.
         /// So, if you are adding key-value pairs to an existing list in the metadata field, remember to include the existing key-value pairs in the update request.
         /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("metadata")]
         [DataMember(Name = "metadata")]
         public IDictionary<string, object>? Metadata { get; init; }
     }
