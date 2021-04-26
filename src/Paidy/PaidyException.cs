@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
-using Utf8Json;
-using Utf8Json.Resolvers;
+using System.Text.Json;
 
 
 
@@ -29,8 +28,18 @@ namespace Paidy
         /// Gets the error information.
         /// </summary>
         public ErrorResponse Error
-            => this.error
-            ??= JsonSerializer.Deserialize<ErrorResponse>(this.Payload, StandardResolver.AllowPrivate);
+        {
+            get
+            {
+                if (this.error is null)
+                {
+                    this.error = JsonSerializer.Deserialize<ErrorResponse>(this.Payload);
+                    if (this.error is null)
+                        throw new NotSupportedException("Null response was detected.");
+                }
+                return this.error;
+            }
+        }
         private ErrorResponse? error;
         #endregion
 
