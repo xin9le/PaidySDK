@@ -207,4 +207,146 @@ namespace Paidy.Internals
         }
         #endregion
     }
+
+
+
+    /// <summary>
+    /// Converts from/to <see cref="DateTimeOffset"/>?.
+    /// </summary>
+    internal sealed class NullableDateTimeOffsetConverter : JsonConverter<DateTimeOffset?>
+    {
+        #region Properties
+        /// <summary>
+        /// Gets a format specifier that defines the expected format of input/output.
+        /// </summary>
+        private string? Format { get; }
+
+
+        /// <summary>
+        /// Gets an object that supplies culture-specific formatting information about input/output.
+        /// </summary>
+        private IFormatProvider? Provider { get; }
+
+
+        /// <summary>
+        /// Gets whether or not to treat whitespace as null.
+        /// </summary>
+        private bool TreatsWhiteSpaceAsNull { get; }
+        #endregion
+
+
+        #region Constructors
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        public NullableDateTimeOffsetConverter()
+            : this(false)
+        { }
+
+
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        /// <param name="treatsWhiteSpaceAsNull"></param>
+        public NullableDateTimeOffsetConverter(bool treatsWhiteSpaceAsNull)
+        {
+            this.Format = null;
+            this.Provider = null;
+            this.TreatsWhiteSpaceAsNull = treatsWhiteSpaceAsNull;
+        }
+
+
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        /// <param name="format"></param>
+        public NullableDateTimeOffsetConverter(string format)
+            : this(format, false)
+        { }
+
+
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="treatsWhiteSpaceAsNull"></param>
+        public NullableDateTimeOffsetConverter(string format, bool treatsWhiteSpaceAsNull)
+        {
+            this.Format = format;
+            this.Provider = null;
+            this.TreatsWhiteSpaceAsNull = treatsWhiteSpaceAsNull;
+        }
+
+
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="provider"></param>
+        public NullableDateTimeOffsetConverter(string format, IFormatProvider provider)
+            : this(format, provider, false)
+        { }
+
+
+        /// <summary>
+        /// Creates instance.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="provider"></param>
+        /// <param name="treatsWhiteSpaceAsNull"></param>
+        public NullableDateTimeOffsetConverter(string format, IFormatProvider provider, bool treatsWhiteSpaceAsNull)
+        {
+            this.Format = format;
+            this.Provider = provider;
+            this.TreatsWhiteSpaceAsNull = treatsWhiteSpaceAsNull;
+        }
+        #endregion
+
+
+        #region Overrides
+        /// <inheritdoc/>
+        public override DateTimeOffset? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            try
+            {
+                var value = reader.GetString();
+                if (value is null)
+                    return null;
+
+                if (this.TreatsWhiteSpaceAsNull && string.IsNullOrWhiteSpace(value))
+                    return null;
+
+                return this.Format is null
+                   ? DateTimeOffset.Parse(value, this.Provider)
+                   : DateTimeOffset.ParseExact(value, this.Format, this.Provider);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonException(null, ex);
+            }
+        }
+
+
+        /// <inheritdoc/>
+        public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)
+        {
+            try
+            {
+                if (value is null)
+                {
+                    writer.WriteNullValue();
+                }
+                else
+                {
+                    var text = value.Value.ToString(this.Format, this.Provider);
+                    writer.WriteStringValue(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new JsonException(null, ex);
+            }
+        }
+        #endregion
+    }
 }
