@@ -48,7 +48,7 @@ namespace Paidy.Payments
             const string url = "payments";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -70,7 +70,7 @@ namespace Paidy.Payments
             var url = $"payments/{id}/captures";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -108,7 +108,7 @@ namespace Paidy.Payments
             var url = $"payments/{id}/refunds";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -126,7 +126,7 @@ namespace Paidy.Payments
         {
             var url = $"payments/{id}";
             var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -148,7 +148,7 @@ namespace Paidy.Payments
             var url = $"payments/{id}";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PutAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -166,7 +166,7 @@ namespace Paidy.Payments
         {
             var url = $"payments/{id}/close";
             var response = await this.HttpClient.PostAsync(url, null!, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync(response).ConfigureAwait(false);
+            return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -175,19 +175,24 @@ namespace Paidy.Payments
         /// Reads the response content of the payment.
         /// </summary>
         /// <param name="response"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static async ValueTask<PaymentResponse> ReadContentAsync(HttpResponseMessage response)
+        private static async ValueTask<PaymentResponse> ReadContentAsync(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var result = await response.Content.ReadFromJsonAsync<PaymentResponse>().ConfigureAwait(false);
+                var result = await response.Content.ReadFromJsonAsync<PaymentResponse>(options: null, cancellationToken).ConfigureAwait(false);
                 if (result is null)
                     throw new NotSupportedException($"Null response was detected | StatusCode : {response.StatusCode}");
                 return result;
             }
             else
             {
+#if NETSTANDARD || NET461_OR_GREATER
                 var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#else
+                var error = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#endif
                 throw new PaidyException(response.StatusCode, error);
             }
         }
