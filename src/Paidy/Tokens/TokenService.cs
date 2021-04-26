@@ -50,7 +50,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/suspend";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -72,7 +72,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/resume";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -92,7 +92,7 @@ namespace Paidy.Tokens
             var url = $"tokens/{id}/delete";
             var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
             var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -110,7 +110,7 @@ namespace Paidy.Tokens
         {
             var url = $"tokens/{id}";
             var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync<TokenResponse>(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -126,7 +126,7 @@ namespace Paidy.Tokens
         {
             const string url = "tokens";
             var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await ReadContentAsync<TokenResponse[]>(response).ConfigureAwait(false);
+            return await ReadContentAsync<TokenResponse[]>(response, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -135,19 +135,24 @@ namespace Paidy.Tokens
         /// Reads the response content of the token.
         /// </summary>
         /// <param name="response"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private static async ValueTask<T> ReadContentAsync<T>(HttpResponseMessage response)
+        private static async ValueTask<T> ReadContentAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var result = await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
+                var result = await response.Content.ReadFromJsonAsync<T>(options: null, cancellationToken).ConfigureAwait(false);
                 if (result is null)
                     throw new NotSupportedException($"Null response was detected | StatusCode : {response.StatusCode}");
                 return result;
             }
             else
             {
+#if NETSTANDARD || NET461_OR_GREATER
                 var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#else
+                var error = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#endif
                 throw new PaidyException(response.StatusCode, error);
             }
         }
