@@ -1,28 +1,29 @@
-﻿namespace Paidy.Tokens.Entities
+﻿namespace Paidy.Tokens.Entities;
+
+
+
+/// <summary>
+/// Represents the Paidy-defined suspend reason codes.
+/// </summary>
+public enum SuspendReasonCode : byte
 {
     /// <summary>
-    /// Represents the Paidy-defined suspend reason codes.
+    /// consumer.requested
     /// </summary>
-    public enum SuspendReasonCode : byte
-    {
-        /// <summary>
-        /// consumer.requested
-        /// </summary>
-        ConsumerRequested = 0,
+    ConsumerRequested = 0,
 
-        /// <summary>
-        /// merchant.requested
-        /// </summary>
-        MerchantRequested,
+    /// <summary>
+    /// merchant.requested
+    /// </summary>
+    MerchantRequested,
 
-        /// <summary>
-        /// fraud.detected
-        /// </summary>
-        FraudDetected,
+    /// <summary>
+    /// fraud.detected
+    /// </summary>
+    FraudDetected,
 
-        /// <summary>
-        /// general
-        /// </summary>
-        General,
-    }
+    /// <summary>
+    /// general
+    /// </summary>
+    General,
 }

@@ -5,53 +5,52 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Paidy.Payments;
 using Paidy.Tokens;
 
+namespace Paidy;
 
 
-namespace Paidy
+
+/// <summary>
+/// Provides <see cref="IServiceCollection"/> extension functions.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Provides <see cref="IServiceCollection"/> extension functions.
+    /// Add Paidy services to DI.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddPaidy(this IServiceCollection services, PaidyOptions options)
+        => services.AddPaidy(_ => options);
+
+
+    /// <summary>
+    /// Add Paidy services to DI.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="optionsFactory"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddPaidy(this IServiceCollection services, Func<IServiceProvider, PaidyOptions> optionsFactory)
     {
-        /// <summary>
-        /// Add Paidy services to DI.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddPaidy(this IServiceCollection services, PaidyOptions options)
-            => services.AddPaidy(_ => options);
-
-
-        /// <summary>
-        /// Add Paidy services to DI.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="optionsFactory"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddPaidy(this IServiceCollection services, Func<IServiceProvider, PaidyOptions> optionsFactory)
+        const string httpClientName = "___Paidy.HttpClient___";
+        services.AddHttpClient(httpClientName, (provider, client) =>
         {
-            const string httpClientName = "___Paidy.HttpClient___";
-            services.AddHttpClient(httpClientName, (provider, client) =>
-            {
-                var options = optionsFactory(provider);
-                client.BaseAddress = new(options.ApiEndpoint);
-                client.DefaultRequestHeaders.Authorization = new("Bearer", options.SecretKey);
-                if (options.ApiVersion is not null)
-                    client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
-            });
-            services.TryAddSingleton(static x => new PaymentService(getHttpClient(x)));
-            services.TryAddSingleton(static x => new TokenService(getHttpClient(x)));
-            return services;
+            var options = optionsFactory(provider);
+            client.BaseAddress = new(options.ApiEndpoint);
+            client.DefaultRequestHeaders.Authorization = new("Bearer", options.SecretKey);
+            if (options.ApiVersion is not null)
+                client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
+        });
+        services.TryAddSingleton(static x => new PaymentService(getHttpClient(x)));
+        services.TryAddSingleton(static x => new TokenService(getHttpClient(x)));
+        return services;
 
-            #region Local functions
-            static HttpClient getHttpClient(IServiceProvider provider)
-            {
-                var factory = provider.GetRequiredService<IHttpClientFactory>();
-                return factory.CreateClient(httpClientName);
-            }
-            #endregion
+        #region Local functions
+        static HttpClient getHttpClient(IServiceProvider provider)
+        {
+            var factory = provider.GetRequiredService<IHttpClientFactory>();
+            return factory.CreateClient(httpClientName);
         }
+        #endregion
     }
 }

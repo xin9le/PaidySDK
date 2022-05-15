@@ -1,33 +1,34 @@
-﻿namespace Paidy.Tokens.Entities
+﻿namespace Paidy.Tokens.Entities;
+
+
+
+/// <summary>
+/// Represents the Paidy-defined delete reason codes.
+/// </summary>
+public enum DeleteReasonCode : byte
 {
     /// <summary>
-    /// Represents the Paidy-defined delete reason codes.
+    /// consumer.requested
     /// </summary>
-    public enum DeleteReasonCode : byte
-    {
-        /// <summary>
-        /// consumer.requested
-        /// </summary>
-        ConsumerRequested = 0,
+    ConsumerRequested = 0,
 
-        /// <summary>
-        /// subscription.expired
-        /// </summary>
-        SubscriptionExpired,
+    /// <summary>
+    /// subscription.expired
+    /// </summary>
+    SubscriptionExpired,
 
-        /// <summary>
-        /// merchant.requested
-        /// </summary>
-        MerchantRequested,
+    /// <summary>
+    /// merchant.requested
+    /// </summary>
+    MerchantRequested,
 
-        /// <summary>
-        /// fraud.detected
-        /// </summary>
-        FraudDetected,
+    /// <summary>
+    /// fraud.detected
+    /// </summary>
+    FraudDetected,
 
-        /// <summary>
-        /// general
-        /// </summary>
-        General,
-    }
+    /// <summary>
+    /// general
+    /// </summary>
+    General,
 }

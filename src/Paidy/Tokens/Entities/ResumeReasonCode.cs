@@ -1,23 +1,24 @@
-﻿namespace Paidy.Tokens.Entities
+﻿namespace Paidy.Tokens.Entities;
+
+
+
+/// <summary>
+/// Represents the Paidy-defined resume reason codes.
+/// </summary>
+public enum ResumeReasonCode : byte
 {
     /// <summary>
-    /// Represents the Paidy-defined resume reason codes.
+    /// consumer.requested
     /// </summary>
-    public enum ResumeReasonCode : byte
-    {
-        /// <summary>
-        /// consumer.requested
-        /// </summary>
-        ConsumerRequested = 0,
+    ConsumerRequested = 0,
 
-        /// <summary>
-        /// merchant.requested
-        /// </summary>
-        MerchantRequested,
+    /// <summary>
+    /// merchant.requested
+    /// </summary>
+    MerchantRequested,
 
-        /// <summary>
-        /// general
-        /// </summary>
-        General,
-    }
+    /// <summary>
+    /// general
+    /// </summary>
+    General,
 }
