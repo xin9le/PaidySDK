@@ -18,9 +18,16 @@ public sealed class TokenService
 {
     #region Properties
     /// <summary>
+    /// Gets the factory of <see cref="System.Net.Http.HttpClient"/>.
+    /// </summary>
+    private IHttpClientFactory HttpClientFactory { get; }
+
+
+    /// <summary>
     /// Gets the HTTP client.
     /// </summary>
-    private HttpClient HttpClient { get; }
+    private HttpClient HttpClient
+        => this.HttpClientFactory.CreateClient(HttpClientNames.Paidy);
     #endregion
 
 
@@ -28,8 +35,8 @@ public sealed class TokenService
     /// <summary>
     /// Creates instance.
     /// </summary>
-    internal TokenService(HttpClient client)
-        => this.HttpClient = client;
+    internal TokenService(IHttpClientFactory factory)
+        => this.HttpClientFactory = factory;
     #endregion
 
 

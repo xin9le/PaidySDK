@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Paidy.Internals;
 using Paidy.Payments;
 using Paidy.Tokens;
 
@@ -32,8 +33,7 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddPaidy(this IServiceCollection services, Func<IServiceProvider, PaidyOptions> optionsFactory)
     {
-        const string httpClientName = "___Paidy.HttpClient___";
-        services.AddHttpClient(httpClientName, (provider, client) =>
+        services.AddHttpClient(HttpClientNames.Paidy, (provider, client) =>
         {
             var options = optionsFactory(provider);
             client.BaseAddress = new(options.ApiEndpoint);
@@ -41,16 +41,13 @@ public static class ServiceCollectionExtensions
             if (options.ApiVersion is not null)
                 client.DefaultRequestHeaders.Add("Paidy-Version", options.ApiVersion);
         });
-        services.TryAddSingleton(static x => new PaymentService(getHttpClient(x)));
-        services.TryAddSingleton(static x => new TokenService(getHttpClient(x)));
+        services.TryAddSingleton(static x => new PaymentService(getFactory(x)));
+        services.TryAddSingleton(static x => new TokenService(getFactory(x)));
         return services;
 
         #region Local functions
-        static HttpClient getHttpClient(IServiceProvider provider)
-        {
-            var factory = provider.GetRequiredService<IHttpClientFactory>();
-            return factory.CreateClient(httpClientName);
-        }
+        static IHttpClientFactory getFactory(IServiceProvider provider)
+            => provider.GetRequiredService<IHttpClientFactory>();
         #endregion
     }
 }
