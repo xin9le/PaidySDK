@@ -1,0 +1,25 @@
+﻿<Project>
+    
+    <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <Version>1.2.1.0</Version>
+        <PackageProjectUrl>https://github.com/xin9le/PaidySDK</PackageProjectUrl>
+        <PackageIconUrl>https://paidy.com/logo.png</PackageIconUrl>
+        <PackageTags>Paidy, Payments, E-Commerce</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Company />
+        <Authors>xin9le</Authors>
+        <Copyright>Copyright© $(Authors), All rights reserved.</Copyright>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../../README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>

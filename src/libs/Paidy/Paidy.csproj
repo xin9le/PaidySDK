@@ -1,25 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <!-- NuGet -->
+    <Import Project="../NuGet.props" />
+    
     <PropertyGroup>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <!-- NuGet -->
-        <IsPackable>true</IsPackable>
         <PackageId>PaidySDK</PackageId>
-        <Version>1.2.1.0</Version>
         <Description>Paidy SDK for .NET</Description>
-        <PackageProjectUrl>https://github.com/xin9le/PaidySDK</PackageProjectUrl>
-        <PackageIconUrl>https://paidy.com/logo.png</PackageIconUrl>
-        <PackageTags>Paidy, Payments, E-Commerce</PackageTags>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
-        <RepositoryType>Git</RepositoryType>
-        <Company />
-        <Authors>xin9le</Authors>
-        <Copyright>Copyright© xin9le, All rights reserved.</Copyright>
-        <PackageReleaseNotes></PackageReleaseNotes>
     </PropertyGroup>
 
+    <!-- PackageReference -->
     <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
         <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     </ItemGroup>
