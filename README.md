@@ -10,6 +10,8 @@ PaidySDK is the simple and thin Paidy API wrapper library for .NET that supports
 
 
 [![Releases](https://img.shields.io/github/release/xin9le/PaidySDK.svg)](https://github.com/xin9le/PaidySDK/releases)
+[![Nuget packages](https://img.shields.io/nuget/v/PaidySDK.svg)](https://www.nuget.org/packages/PaidySDK/)
+[![GitHub license](https://img.shields.io/github/license/xin9le/PaidySDK)](https://github.com/xin9le/PaidySDK/blob/main/LICENSE)
 
 
 
