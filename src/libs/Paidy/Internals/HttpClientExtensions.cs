@@ -12,7 +12,7 @@ namespace Paidy.Internals;
 /// </summary>
 internal static class HttpClientExtensions
 {
-#if NETSTANDARD2_0 || NET461_OR_GREATER
+#if NETSTANDARD2_0 || NET462_OR_GREATER
     private static readonly HttpMethod PatchMethod = new("PATCH");
 
 
