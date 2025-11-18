@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Paidy.Internals;
+using Paidy.Internals.Net.Http;
 using Paidy.Payments;
 using Paidy.Tokens;
 

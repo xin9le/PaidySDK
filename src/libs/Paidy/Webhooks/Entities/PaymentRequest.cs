@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Paidy.Internals;
+using Paidy.Internals.Text.Json;
 
 namespace Paidy.Webhooks.Entities;
 

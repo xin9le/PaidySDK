@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using Paidy.Internals;
+using Paidy.Internals.Text.Json;
 
 namespace Paidy.Tokens.Entities;
 

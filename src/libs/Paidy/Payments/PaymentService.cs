@@ -4,7 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Paidy.Internals;
+using Paidy.Internals.Net.Http;
+using Paidy.Internals.Text.Json;
 using Paidy.Payments.Entities;
 
 namespace Paidy.Payments;
