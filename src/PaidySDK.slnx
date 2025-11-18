@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="libs/Paidy/Paidy.csproj" />
+  <Folder Name="/libs/">
+    <Project Path="libs/Paidy/Paidy.csproj" />
+  </Folder>
 </Solution>
