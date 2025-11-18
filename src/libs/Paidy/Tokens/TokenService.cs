@@ -147,7 +147,7 @@ public sealed class TokenService
     /// <returns></returns>
     private static async ValueTask<T> ReadContentAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        if (response.StatusCode == HttpStatusCode.OK)
+        if (response.StatusCode is HttpStatusCode.OK)
         {
             var result = await response.Content.ReadFromJsonAsync<T>(options: null, cancellationToken).ConfigureAwait(false);
             if (result is null)

@@ -187,7 +187,7 @@ public sealed class PaymentService
     /// <returns></returns>
     private static async ValueTask<PaymentResponse> ReadContentAsync(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        if (response.StatusCode == HttpStatusCode.OK)
+        if (response.StatusCode is HttpStatusCode.OK)
         {
             var result = await response.Content.ReadFromJsonAsync<PaymentResponse>(options: null, cancellationToken).ConfigureAwait(false);
             if (result is null)
