@@ -17,18 +17,8 @@ namespace Paidy.Payments;
 /// </summary>
 public sealed class PaymentService
 {
-    #region Properties
-    /// <summary>
-    /// Gets the factory of <see cref="System.Net.Http.HttpClient"/>.
-    /// </summary>
-    private IHttpClientFactory HttpClientFactory { get; }
-
-
-    /// <summary>
-    /// Gets the HTTP client.
-    /// </summary>
-    private HttpClient HttpClient
-        => this.HttpClientFactory.CreateClient(HttpClientNames.Paidy);
+    #region Fields
+    private readonly IHttpClientFactory _httpClientFactory;
     #endregion
 
 
@@ -37,7 +27,7 @@ public sealed class PaymentService
     /// Creates instance.
     /// </summary>
     internal PaymentService(IHttpClientFactory factory)
-        => this.HttpClientFactory = factory;
+        => this._httpClientFactory = factory;
     #endregion
 
 
@@ -53,9 +43,10 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> CreateAsync(CreateRequest request, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         const string url = "payments";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -75,9 +66,10 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> CaptureAsync(string id, CaptureRequest request = default, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"payments/{id}/captures";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -113,9 +105,10 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> RefundAsync(string id, RefundRequest request, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"payments/{id}/refunds";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -132,8 +125,9 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> RetrieveAsync(string id, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"payments/{id}";
-        var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -153,9 +147,10 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> UpdateAsync(string id, UpdateRequest request = default, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"payments/{id}";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PutAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PutAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -172,8 +167,9 @@ public sealed class PaymentService
     /// </remarks>
     public async ValueTask<PaymentResponse> CloseAsync(string id, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"payments/{id}/close";
-        var response = await this.HttpClient.PostAsync(url, null!, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsync(url, null!, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync(response, cancellationToken).ConfigureAwait(false);
     }
 

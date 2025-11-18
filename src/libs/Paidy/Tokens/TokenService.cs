@@ -17,18 +17,8 @@ namespace Paidy.Tokens;
 /// </summary>
 public sealed class TokenService
 {
-    #region Properties
-    /// <summary>
-    /// Gets the factory of <see cref="System.Net.Http.HttpClient"/>.
-    /// </summary>
-    private IHttpClientFactory HttpClientFactory { get; }
-
-
-    /// <summary>
-    /// Gets the HTTP client.
-    /// </summary>
-    private HttpClient HttpClient
-        => this.HttpClientFactory.CreateClient(HttpClientNames.Paidy);
+    #region Fields
+    private readonly IHttpClientFactory _httpClientFactory;
     #endregion
 
 
@@ -37,7 +27,7 @@ public sealed class TokenService
     /// Creates instance.
     /// </summary>
     internal TokenService(IHttpClientFactory factory)
-        => this.HttpClientFactory = factory;
+        => this._httpClientFactory = factory;
     #endregion
 
 
@@ -55,9 +45,10 @@ public sealed class TokenService
     /// </remarks>
     public async ValueTask<TokenResponse> SuspendAsync(string id, SuspendRequest request, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"tokens/{id}/suspend";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -77,9 +68,10 @@ public sealed class TokenService
     /// </remarks>
     public async ValueTask<TokenResponse> ResumeAsync(string id, ResumeRequest request, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"tokens/{id}/resume";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -97,9 +89,10 @@ public sealed class TokenService
     /// </remarks>
     public async ValueTask<TokenResponse> DeleteAsync(string id, DeleteRequest request, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"tokens/{id}/delete";
         var options = JsonSerializerOptionsProvider.NoEscapeIgnoreNull;
-        var response = await this.HttpClient.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
+        var response = await client.PostAsJsonAsync(url, request, options, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -116,8 +109,9 @@ public sealed class TokenService
     /// </remarks>
     public async ValueTask<TokenResponse> RetrieveAsync(string id, CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         var url = $"tokens/{id}";
-        var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync<TokenResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -132,8 +126,9 @@ public sealed class TokenService
     /// </remarks>
     public async ValueTask<TokenResponse[]> RetrieveAllAsync(CancellationToken cancellationToken = default)
     {
+        var client = this._httpClientFactory.ForPaidy();
         const string url = "tokens";
-        var response = await this.HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
         return await ReadContentAsync<TokenResponse[]>(response, cancellationToken).ConfigureAwait(false);
     }
 
