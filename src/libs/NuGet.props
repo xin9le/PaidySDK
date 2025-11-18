@@ -2,7 +2,7 @@
     
     <PropertyGroup>
         <IsPackable>true</IsPackable>
-        <Version>1.2.1.0</Version>
+        <Version>1.2.2.0</Version>
         <PackageProjectUrl>https://github.com/xin9le/PaidySDK</PackageProjectUrl>
         <PackageIconUrl>https://paidy.com/logo.png</PackageIconUrl>
         <PackageTags>Paidy, Payments, E-Commerce</PackageTags>
