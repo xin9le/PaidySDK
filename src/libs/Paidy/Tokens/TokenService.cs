@@ -156,7 +156,7 @@ public sealed class TokenService
         }
         else
         {
-#if NETSTANDARD || NET461_OR_GREATER
+#if NETSTANDARD || NET462_OR_GREATER
             var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #else
             var error = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
