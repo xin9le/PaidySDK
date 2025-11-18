@@ -271,7 +271,7 @@ public sealed class PaymentResponse
         /// <summary>
         /// Time the order was last updated, in UTC, and displayed in ISO 8601 datetime format.
         /// </summary>
-        [JsonConverterWithParams(typeof(NullableDateTimeOffsetConverter), true)]
+        [JsonConverter<NullableDateTimeOffsetConverter>(true)]
         [JsonInclude]
         [JsonPropertyName("updated_at")]
         [DataMember(Name = "updated_at")]

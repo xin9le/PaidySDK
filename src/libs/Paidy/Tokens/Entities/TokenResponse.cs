@@ -176,7 +176,7 @@ public sealed class TokenResponse
     /// <summary>
     /// Date and time the token was deleted, in UTC, and displayed in ISO 8601 format.
     /// </summary>
-    [JsonConverterWithParams(typeof(NullableDateTimeOffsetConverter), true)]
+    [JsonConverter<NullableDateTimeOffsetConverter>(true)]
     [JsonInclude]
     [JsonPropertyName("deleted_at")]
     [DataMember(Name = "deleted_at")]
