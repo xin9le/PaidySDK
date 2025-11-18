@@ -2,8 +2,9 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Paidy.Internals.Text.Json;
 
-namespace Paidy.Internals;
+namespace Paidy.Internals.Net.Http;
 
 
 

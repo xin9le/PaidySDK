@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace Paidy.Internals;
+namespace Paidy.Internals.Net.Http;
 
 
 

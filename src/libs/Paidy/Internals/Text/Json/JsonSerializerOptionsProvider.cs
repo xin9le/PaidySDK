@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Paidy.Internals;
+namespace Paidy.Internals.Text.Json;
 
 
 

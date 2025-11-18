@@ -5,7 +5,7 @@ using Paidy.Payments.Entities;
 using Paidy.Tokens.Entities;
 using Paidy.Webhooks.Entities;
 
-namespace Paidy.Internals;
+namespace Paidy.Internals.Text.Json;
 
 
 
