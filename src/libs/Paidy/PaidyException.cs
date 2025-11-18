@@ -31,16 +31,12 @@ public sealed class PaidyException : Exception
     {
         get
         {
-            if (this.error is null)
-            {
-                this.error = JsonSerializer.Deserialize<ErrorResponse>(this.Payload);
-                if (this.error is null)
-                    throw new NotSupportedException("Null response was detected.");
-            }
-            return this.error;
+            field ??= JsonSerializer.Deserialize<ErrorResponse>(this.Payload);
+            if (field is null)
+                throw new NotSupportedException("Null response was detected.");
+            return field;
         }
     }
-    private ErrorResponse? error;
     #endregion
 
 
