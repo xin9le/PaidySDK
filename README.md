@@ -1,4 +1,4 @@
-![Banner](https://download.paidy.com/Checkout_728x90.png)
+﻿![Banner](https://download.paidy.com/Checkout_728x90.png)
 
 
 # PaidySDK
@@ -15,9 +15,9 @@ PaidySDK is the simple and thin Paidy API wrapper library for .NET that supports
 
 # Support platforms
 
-- .NET Framework 4.6.1+
+- .NET Framework 4.6.2+
 - .NET Standard 2.0+
-- .NET 5.0+
+- .NET 8.0+
 
 
 
@@ -41,11 +41,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var options = new PaidyOptions
-        (
-            apiEndpoint: "https://api.paidy.com",
-            secretKey: "sk_...",
-            apiVersion: null
-        );
+        {
+            ApiEndpoint = "https://api.paidy.com",
+            SecretKey = "sk_...",
+            ApiVersion = null,
+        };
         services.AddPaidy(options);
     }
 }
@@ -58,13 +58,13 @@ using Paidy.Tokens;
 
 public class SampleController : Controller
 {
-    private PaymentService PaymentService { get; }
-    private TokenService TokenService { get; }
+    private readonly PaymentService _paymentService;
+    private readonly TokenService _tokenService;
 
     public SampleController(PaymentService paymentService, TokenService tokenService)
     {
-        this.PaymentService = paymentService;
-        this.TokenService = tokenService;
+        this._paymentService = paymentService;
+        this._tokenService = tokenService;
     }
 }
 ```
@@ -94,9 +94,6 @@ Getting started from downloading [NuGet](https://www.nuget.org/packages/PaidySDK
 ```
 dotnet add package PaidySDK
 ```
-```
-PM> Install-Package PaidySDK
-```
 
 
 
@@ -115,4 +112,4 @@ This library is provided under [MIT License](http://opensource.org/licenses/MIT)
 
 # Author
 
-Takaaki Suzuki (a.k.a [@xin9le](https://twitter.com/xin9le)) is software developer in Japan who awarded Microsoft MVP for Developer Technologies (C#) since July 2012.
+Takaaki Suzuki (a.k.a [@xin9le](https://about.xin9le.net)) is software developer in Japan who awarded Microsoft MVP for Developer Technologies (C#) since July 2012.
