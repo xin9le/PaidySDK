@@ -26,10 +26,11 @@ internal static class HttpClientExtensions
         /// <param name="content">The HTTP request content sent to the server.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public Task<HttpResponseMessage> PatchAsync(string? requestUri, HttpContent content, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseMessage> PatchAsync(string? requestUri, HttpContent content, CancellationToken cancellationToken = default)
         {
             var request = new HttpRequestMessage(PatchMethod, requestUri) { Content = content };
-            return @this.SendAsync(request, cancellationToken);
+            var response = await @this.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            return response;
         }
     }
 #endif
@@ -66,7 +67,10 @@ internal static class HttpClientExtensions
         /// <param name="value">The value to serialize.</param>
         /// <param name="cancellationToken"></param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public Task<HttpResponseMessage> PatchAsJsonAsync<T>(string? requestUri, T value, CancellationToken cancellationToken)
-            => @this.PatchAsJsonAsync(requestUri, value, options: null, cancellationToken);
+        public async Task<HttpResponseMessage> PatchAsJsonAsync<T>(string? requestUri, T value, CancellationToken cancellationToken)
+        {
+            var response = await @this.PatchAsJsonAsync(requestUri, value, options: null, cancellationToken).ConfigureAwait(false);
+            return response;
+        }
     }
 }
