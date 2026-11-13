@@ -57,20 +57,5 @@ internal static class HttpClientExtensions
                 return await @this.PatchAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
             }
         }
-
-
-        /// <summary>
-        /// Send a PATCH request to the specified Uri containing the value serialized as JSON in the request body.
-        /// </summary>
-        /// <typeparam name="T">The type of the value to serialize.</typeparam>
-        /// <param name="requestUri">The Uri the request is sent to.</param>
-        /// <param name="value">The value to serialize.</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>The task object representing the asynchronous operation.</returns>
-        public async Task<HttpResponseMessage> PatchAsJsonAsync<T>(string? requestUri, T value, CancellationToken cancellationToken)
-        {
-            var response = await @this.PatchAsJsonAsync(requestUri, value, options: null, cancellationToken).ConfigureAwait(false);
-            return response;
-        }
     }
 }
