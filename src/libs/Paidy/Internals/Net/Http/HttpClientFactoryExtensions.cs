@@ -9,11 +9,13 @@ namespace Paidy.Internals.Net.Http;
 /// </summary>
 internal static class HttpClientFactoryExtensions
 {
-    /// <summary>
-    /// Create <see cref="HttpClient"/> instance for Paidy API.
-    /// </summary>
-    /// <param name="factory"></param>
-    /// <returns></returns>
-    public static HttpClient ForPaidy(this IHttpClientFactory factory)
-        => factory.CreateClient(HttpClientNames.Paidy);
+    extension(IHttpClientFactory @this)
+    {
+        /// <summary>
+        /// Create <see cref="HttpClient"/> instance for Paidy API.
+        /// </summary>
+        /// <returns></returns>
+        public HttpClient ForPaidy()
+            => @this.CreateClient(HttpClientNames.Paidy);
+    }
 }
